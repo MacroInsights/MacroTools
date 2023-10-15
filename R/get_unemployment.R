@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' unemployment <- get_unemployment()
-get_unemployment <- memoise::memoise(function(years = 5,
+get_unemployment <- function(years = 5,
                                      geography = "National",
                                      demography = FALSE)
 {
@@ -71,4 +71,4 @@ get_unemployment <- memoise::memoise(function(years = 5,
 
   raw_data_fred %>% xts::as.xts()
 
-}, cache = memoise::cache_filesystem("cache/"))
+}
