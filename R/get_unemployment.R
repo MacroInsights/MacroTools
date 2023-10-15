@@ -64,7 +64,7 @@ get_unemployment <- function(years = 5,
 
   if(demography) {
     raw_data_fred <- raw_data_fred %>%
-      rename(WhiteUR = LNS14000003,
+      dplyr::rename(WhiteUR = LNS14000003,
              BlackUR = LNS14000006,
              HispanicUR = LNS14000009,
              AsianUR = LNU04032183) }
