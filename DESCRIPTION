@@ -18,4 +18,6 @@ Imports:
     tidyr,
     xts,
     memoise,
-    digest
+    digest,
+    tsibble,
+    zoo
