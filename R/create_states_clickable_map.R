@@ -41,7 +41,11 @@ create_states_clickable_map <- function(
     as_tibble() |>
     select(-USUR) |>
     drop_na() |>
-    tail(1)  |>
+    tail(1)
+  tkmessageBox(title = "Vintage of Data",
+               message = paste("Data is updated as of",unemployment %>% select(date) %>% pull() %>% as.yearmon()), icon = "info", type = "ok")
+  print(paste("Data is updated as of",unemployment %>% select(date) %>% pull() %>% as.yearmon()))
+  unemployment %>%
     pivot_longer(-date, names_to = 'State', values_to = 'UR') |>
     mutate(FIP = substr(State, start = 1, stop = 2),
            names = fips(FIP, to = "Name")) |>
