@@ -2,6 +2,7 @@
 
 export("%>%")
 export(create_states_clickable_map)
+export(create_unemp_heatmap)
 export(get_unemployment)
 export(transform_to_tsibble)
 importFrom(magrittr,"%>%")
