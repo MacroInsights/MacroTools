@@ -57,7 +57,7 @@ create_unemp_heatmap <- function(
     #   na_color = "black"
     #   ) |>
     data_color(columns =  c(Chg_2014:Chg_2023), target_columns = c(2:11),
-               palette = c("green","red"),
+               palette = c("#046438","#d40509"),
                na_color = "black") %>%
     tab_options(table.background.color = "black",
                 table.border.top.width=0,
