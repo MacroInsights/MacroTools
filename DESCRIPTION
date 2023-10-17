@@ -22,5 +22,6 @@ Imports:
     tsibble,
     zoo,
     cdlTools,
-    leaflet,
-    albersusa
+    leaflet
+Remotes:
+    hrbrmstr/albersusa
