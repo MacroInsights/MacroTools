@@ -23,6 +23,7 @@ Imports:
     zoo,
     cdlTools,
     leaflet,
-    gt
+    gt,
+    tcltk
 Remotes:
     hrbrmstr/albersusa
