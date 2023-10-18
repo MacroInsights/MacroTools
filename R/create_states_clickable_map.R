@@ -15,9 +15,9 @@ create_states_clickable_map <- function(
 
   # Loading pacman, libraries from CRAN, libraries from Github
   if (!require("pacman")) install.packages("pacman")
-  pacman::p_load('devtools','tidyverse','fredr','cdlTools','leaflet','tcltk','zoo')
-  if (!require("albersusa")) devtools::install_github('hrbrmstr/albersusa')
-  pacman::p_load('albersusa')
+  pacman::p_load('tidyverse','fredr','cdlTools','leaflet','tcltk','zoo')
+  # if (!require("albersusa")) devtools::install_github('hrbrmstr/albersusa')
+  # pacman::p_load('albersusa')
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
@@ -58,7 +58,10 @@ create_states_clickable_map <- function(
   # Merges the unemploymend and urls data
   states_data <- states_urls %>% inner_join(states_ur)
   # Merges the states data with geography
-  states_map <- usa_sf("lcc") %>% inner_join(states_data)
+  # states_map <- usa_sf("lcc") %>% inner_join(states_data)
+  usa_sf <- readRDS("usaSF.RDS")
+  # Merges the states data with geography
+  states_map <- usa_sf %>% inner_join(states_data)
 
   # Colors
   # Sets the heatmap to Blue by quantiles
