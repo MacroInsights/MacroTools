@@ -42,7 +42,7 @@ create_states_clickable_map <- function(
   unemployment %>%
     pivot_longer(-date, names_to = 'State', values_to = 'UR') |>
     mutate(FIP = substr(State, start = 1, stop = 2),
-           names = fips(FIP, to = "Name")) |>
+           names = cdlTools::fips(FIP, to = "Name")) |>
     transmute(names = names,
               unemployment = UR) -> states_ur
 
@@ -64,7 +64,7 @@ create_states_clickable_map <- function(
   states_map %>%
     leaflet(options = leafletOptions(crs = leafletCRS(crsClass = "L.CRS.Simple"),
                                      minZoom = -100), width = "100%") %>%
-    addPolygons(data = states_map,
+    leaflet::addPolygons(data = states_map,
                 weight = 2,
                 label = ~paste0(name,": ",unemployment,"%"),
                 color = "black",
