@@ -62,7 +62,7 @@ create_states_clickable_map <- function(
 
   # Creates the map and saves it as HTML
   states_map %>%
-    leaflet::leaflet(options = leafletOptions(crs = leafletCRS(crsClass = "L.CRS.Simple"),
+    leaflet::leaflet(options = leaflet::leafletOptions(crs = leaflet::leafletCRS(crsClass = "L.CRS.Simple"),
                                      minZoom = -100), width = "100%") %>%
     leaflet::addPolygons(data = states_map,
                 weight = 2,
