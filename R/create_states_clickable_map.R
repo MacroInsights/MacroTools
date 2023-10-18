@@ -15,8 +15,9 @@ create_states_clickable_map <- function(
 
   # Loading pacman, libraries from CRAN, libraries from Github
   if (!require("pacman")) install.packages("pacman")
-  pacman::p_load('tidyverse','fredr','cdlTools','leaflet','tcltk','zoo')
-  pacman::p_load_gh('hrbrmstr/albersusa')
+  pacman::p_load('devtools','tidyverse','fredr','cdlTools','leaflet','tcltk','zoo')
+  if (!require("albersusa")) devtools::install_github('hrbrmstr/albersusa')
+  pacman::p_load('albersusa')
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
