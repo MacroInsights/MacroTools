@@ -40,6 +40,8 @@ create_states_clickable_map <- function(
     tail(1)
   print(paste("Data is updated as of",unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()))
 
+  data_date <- unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()
+
   unemployment %>%
     pivot_longer(-date, names_to = 'State', values_to = 'UR') |>
     mutate(FIP = substr(State, start = 1, stop = 2),
