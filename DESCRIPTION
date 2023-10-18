@@ -26,5 +26,6 @@ Imports:
     gt,
     tcltk,
     webshot2
-Remotes:
-    hrbrmstr/albersusa
+Depends: 
+    R (>= 2.10)
+LazyData: true
