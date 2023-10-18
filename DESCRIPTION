@@ -25,7 +25,10 @@ Imports:
     leaflet,
     gt,
     tcltk,
-    webshot2
+    webshot2,
+    albersusa
+Remotes:
+    hrbrmstr/albersusa
 Depends: 
     R (>= 3.5)
 LazyData: true
