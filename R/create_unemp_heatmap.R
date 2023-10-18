@@ -12,7 +12,7 @@ create_unemp_heatmap <- function(
 
   # Loading pacman, libraries from CRAN, libraries from Github
   if (!require("pacman")) install.packages("pacman")
-  pacman::p_load('tidyverse','fredr','gt')
+  pacman::p_load('tidyverse','fredr','gt','webshot2','lubridate')
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)

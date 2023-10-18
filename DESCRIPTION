@@ -24,6 +24,7 @@ Imports:
     cdlTools,
     leaflet,
     gt,
-    tcltk
+    tcltk,
+    webshot2
 Remotes:
     hrbrmstr/albersusa
