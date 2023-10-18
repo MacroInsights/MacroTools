@@ -39,6 +39,7 @@ create_states_clickable_map <- function(
     drop_na() |>
     tail(1)
   print(paste("Data is updated as of",unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()))
+
   unemployment %>%
     pivot_longer(-date, names_to = 'State', values_to = 'UR') |>
     mutate(FIP = substr(State, start = 1, stop = 2),
@@ -71,6 +72,6 @@ create_states_clickable_map <- function(
                 fillColor = ~state_palette(unemployment)) %>%
     htmlwidgets::prependContent(backg) %>%
     htmlwidgets::onRender(jsCode, data=states_map) %>%
-    htmlwidgets::saveWidget("map.html")
+    htmlwidgets::saveWidget(paste0(gsub(" ", "_", data_date),"_map.html"))
 
 }
