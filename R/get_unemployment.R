@@ -3,16 +3,26 @@
 #' @param years Number of years of data to get
 #' @param geography Whether to include all states
 #' @param demography Wheter to include race/ethnicity
+#' @param latest Gets the latest complete unemployment figures
+#' @param fred_key A FRED API
 #'
 #' @return An xts object with unemployment data
 #' @export
 #'
 #' @examples
 #' unemployment <- get_unemployment()
-get_unemployment <- memoise::memoise(function(years = 5,
-                                     geography = "National",
-                                     demography = FALSE)
+get_unemployment <- memoise::memoise(function(
+    years = 5,
+    geography = "National",
+    demography = FALSE,
+    latest = FALSE,
+    fred_key = key)
 {
+
+
+  # Setting FRED API Key
+  fred_key <- gsub("\"", "", fred_key)
+  fredr_set_key(fred_key)
 
   states <- data.frame(state = c(state.abb,"DC"))
 
@@ -68,6 +78,13 @@ get_unemployment <- memoise::memoise(function(years = 5,
              BlackUR = LNS14000006,
              HispanicUR = LNS14000009,
              AsianUR = LNU04032183) }
+
+  # Gets the latest complete unemployment figures
+  if(latest) {
+    raw_data_fred <- raw_data_fred |>
+    drop_na() |>
+      tail(1)
+  }
 
   raw_data_fred %>% xts::as.xts()
 

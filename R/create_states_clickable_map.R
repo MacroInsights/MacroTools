@@ -11,7 +11,7 @@
 create_states_clickable_map <- function(
     states_urls = choose.files(caption = "Select CSV file containing State URLs",
                                multi = FALSE),
-    fred_key = readline(prompt = "Enter FRED API Key: ")) {
+    fred_key = key) {
 
 
   # Setting FRED API Key
@@ -32,12 +32,10 @@ create_states_clickable_map <- function(
   ')
 
   # Get latest state unemployment figures from FRED and JECTools
-  unemployment <- get_unemployment(years = 1, geography = 'State') %>%
+  unemployment <- get_unemployment(years = 1, geography = 'State', latest = TRUE) %>%
     transform_to_tsibble() |>
     as_tibble() |>
-    select(-USUR) |>
-    drop_na() |>
-    tail(1)
+    select(-USUR)
   print(paste("Data is updated as of",unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()))
 
   data_date <- unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()

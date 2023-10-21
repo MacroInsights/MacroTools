@@ -1,6 +1,8 @@
 #' Creates a Heatmap of Unemployment in the United States
 #'
 #' @param fred_key A FRED API KEy
+#' @param color_up A color for when unemployment increases
+#' @param color_down A color for when unemployment decreases
 #'
 #' @return A PNG Table
 #' @export
@@ -8,11 +10,11 @@
 #' @examples
 #' create_unemp_heatmap()
 create_unemp_heatmap <- function(
-    fred_key = readline(prompt = "Enter FRED API Key: ")) {
+    fred_key = key,
+    color_up = "#d40509",
+    color_down = "#046438"
+    ) {
 
-  # Loading pacman, libraries from CRAN, libraries from Github
-  if (!require("pacman")) install.packages("pacman")
-  pacman::p_load('tidyverse','fredr','gt','webshot2','lubridate')
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
@@ -57,7 +59,7 @@ create_unemp_heatmap <- function(
     #   na_color = "black"
     #   ) |>
     data_color(columns =  c(Chg_2014:Chg_2023), target_columns = c(2:11),
-               palette = c("#046438","#d40509"),
+               palette = c(color_down,color_up),
                na_color = "black") %>%
     tab_options(table.background.color = "black",
                 table.border.top.width=0,
