@@ -82,7 +82,7 @@ get_unemployment <- memoise::memoise(function(
   # Gets the latest complete unemployment figures
   if(latest) {
     raw_data_fred <- raw_data_fred |>
-    drop_na() |>
+    tidyr::drop_na() |>
       tail(1)
   }
 
