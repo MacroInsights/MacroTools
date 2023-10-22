@@ -16,13 +16,13 @@ get_unemployment <- memoise::memoise(function(
     geography = "National",
     demography = FALSE,
     latest = FALSE,
-    fred_key = key)
+    fred_key = fredKey)
 {
 
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
-  fredr_set_key(fred_key)
+  fredr::fredr_set_key(fred_key)
 
   states <- data.frame(state = c(state.abb,"DC"))
 

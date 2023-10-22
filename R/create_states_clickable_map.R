@@ -11,7 +11,7 @@
 create_states_clickable_map <- function(
     states_urls = choose.files(caption = "Select CSV file containing State URLs",
                                multi = FALSE),
-    fred_key = key) {
+    fred_key = fredKey) {
 
 
   # Setting FRED API Key
@@ -34,25 +34,27 @@ create_states_clickable_map <- function(
   # Get latest state unemployment figures from FRED and JECTools
   unemployment <- get_unemployment(years = 1, geography = 'State', latest = TRUE) %>%
     transform_to_tsibble() |>
-    as_tibble() |>
-    select(-USUR)
-  print(paste("Data is updated as of",unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()))
+    dplyr::as_tibble() |>
+    dplyr::select(-USUR)
+  print(paste("Data is updated as of",unemployment %>% dplyr::select(date) %>%
+                dplyr::pull() %>% zoo::as.yearmon()))
 
-  data_date <- unemployment %>% select(date) %>% pull() %>% zoo::as.yearmon()
+  data_date <- unemployment %>% dplyr::select(date) %>%
+    dplyr::pull() %>% zoo::as.yearmon()
 
   unemployment %>%
-    pivot_longer(-date, names_to = 'State', values_to = 'UR') |>
-    mutate(FIP = substr(State, start = 1, stop = 2),
+    tidyr::pivot_longer(-date, names_to = 'State', values_to = 'UR') |>
+    dplyr::mutate(FIP = substr(State, start = 1, stop = 2),
            names = cdlTools::fips(FIP, to = "Name")) |>
-    transmute(names = names,
+    dplyr::transmute(names = names,
               unemployment = UR) -> states_ur
 
   # Read URLs for states factsheets
-  states_urls <- read_csv(states_urls, show_col_types = FALSE)
+  states_urls <- readr::read_csv(states_urls, show_col_types = FALSE)
   # Merges the unemploymend and urls data
-  states_data <- states_urls %>% inner_join(states_ur)
+  states_data <- states_urls %>% dplyr::inner_join(states_ur)
   # Merges the states data with geography
-  states_map <- albersusa::usa_sf("lcc") %>% inner_join(states_data)
+  states_map <- albersusa::usa_sf("lcc") %>% dplyr::inner_join(states_data)
 
   # Colors
   # Sets the heatmap to Blue by quantiles

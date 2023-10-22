@@ -7,7 +7,7 @@
 create_states_clickable_map(
   states_urls = choose.files(caption = "Select CSV file containing State URLs", multi =
     FALSE),
-  fred_key = readline(prompt = "Enter FRED API Key: ")
+  fred_key = fredKey
 )
 }
 \arguments{

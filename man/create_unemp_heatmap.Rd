@@ -4,10 +4,18 @@
 \alias{create_unemp_heatmap}
 \title{Creates a Heatmap of Unemployment in the United States}
 \usage{
-create_unemp_heatmap(fred_key = readline(prompt = "Enter FRED API Key: "))
+create_unemp_heatmap(
+  fred_key = fredKey,
+  color_up = "#d40509",
+  color_down = "#046438"
+)
 }
 \arguments{
 \item{fred_key}{A FRED API KEy}
+
+\item{color_up}{A color for when unemployment increases}
+
+\item{color_down}{A color for when unemployment decreases}
 }
 \value{
 A PNG Table
