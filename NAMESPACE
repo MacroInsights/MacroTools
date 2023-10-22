@@ -3,6 +3,7 @@
 export("%>%")
 export(create_states_clickable_map)
 export(create_unemp_heatmap)
+export(enter_api_credentials)
 export(get_inflation)
 export(get_price_indeces)
 export(get_unemployment)
