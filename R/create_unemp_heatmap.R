@@ -79,13 +79,13 @@ create_unemp_heatmap <- function(
     ) |>
     gt::opt_horizontal_padding(scale = 3) |>
     gt::opt_vertical_padding(scale = 1.3)  %>%
-    gt::grand_summary_rows(
-      columns = c(2:11),
-      fns = list(
-        Yearly ~ mean(., na.rm = TRUE)
-      ),
-      fmt = ~ gt::fmt_number(., use_seps = FALSE)
-    ) %>%
+    # gt::grand_summary_rows(
+    #   columns = c(2:11),
+    #   fns = list(
+    #     Yearly ~ mean(., na.rm = TRUE)
+    #   ),
+    #   fmt = ~ gt::fmt_number(., use_seps = FALSE)
+    # ) %>%
     gt::tab_header(
       title = "Unemployment Rate") %>%
     gt::gtsave("unemp_heatmap.png")
