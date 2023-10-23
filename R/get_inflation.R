@@ -18,7 +18,7 @@ get_inflation <- memoise::memoise(function(
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
-  fredr_set_key(fred_key)
+  fredr::fredr_set_key(fred_key)
 
   prices <- get_price_indeces(years)
 
