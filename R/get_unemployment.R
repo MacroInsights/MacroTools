@@ -5,6 +5,7 @@
 #' @param demography Wheter to include race/ethnicity
 #' @param latest Gets the latest complete unemployment figures
 #' @param fred_key A FRED API
+#' @param BLS_key A BLS KEy
 #'
 #' @return An xts object with unemployment data
 #' @export
@@ -16,7 +17,8 @@ get_unemployment <- memoise::memoise(function(
     geography = "National",
     demography = FALSE,
     latest = FALSE,
-    fred_key = fredKey)
+    fred_key = fredKey,
+    BLS_key = blsKey)
 {
 
 
@@ -73,11 +75,44 @@ get_unemployment <- memoise::memoise(function(
     dplyr::rename(USUR = UNRATE)
 
   if(demography) {
+    # Downloading American Indians and Alaska Natives Unemployment
+    start_year <- params$observation_start[[1]] %>% lubridate::year()
+    end_year <- params$observation_end[[1]] %>% lubridate::year()
+    api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+    payload <- glue::glue('{
+                    "seriesid":["LNU04035243"],
+                    "startyear":"{{start_year}}",
+                    "endyear":"{{end_year}}",
+                    "registrationkey":"{{BLS_key}}"
+                    }', .open="{{", .close="}}")
+
+    response <- httr::POST(api_url,
+                     body = payload,
+                     content_type("application/json"),
+                     encode = "json")
+
+    x <- httr::content(response, "text") %>%
+      jsonlite::fromJSON()
+
+    UR_AIAN_raw <- x$Results$series$data[[1]] %>%
+      as_tibble()
+
+    UR_AIAN <- UR_AIAN_raw %>%
+      transmute(date = ym(paste(UR_AIAN_raw$year,
+                                UR_AIAN_raw$periodName)),
+                ur_AIAN = value %>% as.numeric())
+
+    raw_data_fred %>% left_join(UR_AIAN,
+                                by=c("date")) -> raw_data_fred
+
     raw_data_fred <- raw_data_fred %>%
       dplyr::rename(WhiteUR = LNS14000003,
-             BlackUR = LNS14000006,
-             HispanicUR = LNS14000009,
-             AsianUR = LNU04032183) }
+                    BlackUR = LNS14000006,
+                    HispanicUR = LNS14000009,
+                    AsianUR = LNU04032183,
+                    AIANUR = ur_AIAN)
+
+    }
 
   # Gets the latest complete unemployment figures
   if(latest) {

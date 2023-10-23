@@ -9,7 +9,8 @@ get_unemployment(
   geography = "National",
   demography = FALSE,
   latest = FALSE,
-  fred_key = fredKey
+  fred_key = fredKey,
+  BLS_key = blsKey
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ get_unemployment(
 \item{latest}{Gets the latest complete unemployment figures}
 
 \item{fred_key}{A FRED API}
+
+\item{BLS_key}{A BLS KEy}
 }
 \value{
 An xts object with unemployment data

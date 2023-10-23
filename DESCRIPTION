@@ -26,7 +26,10 @@ Imports:
     gt,
     tcltk,
     webshot2,
-    albersusa
+    albersusa,
+    httr,
+    glue,
+    jsonlite
 Remotes:
     hrbrmstr/albersusa
 Depends: 
