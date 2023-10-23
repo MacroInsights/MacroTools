@@ -29,7 +29,8 @@ Imports:
     albersusa,
     httr,
     glue,
-    jsonlite
+    jsonlite,
+    tmap
 Remotes:
     hrbrmstr/albersusa
 Depends: 
