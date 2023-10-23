@@ -88,7 +88,7 @@ get_unemployment <- memoise::memoise(function(
 
     response <- httr::POST(api_url,
                      body = payload,
-                     content_type("application/json"),
+                     httr::content_type("application/json"),
                      encode = "json")
 
     x <- httr::content(response, "text") %>%
