@@ -4,14 +4,14 @@
 \alias{get_price_indeces}
 \title{Downloads unemployment data from Fred}
 \usage{
-get_price_indeces(years = 5, fred_key = fredKey)
+get_price_indeces(years = 5, fred_key = fredKey, BLS_key = blsKey)
 }
 \arguments{
 \item{years}{Number of years of data to get}
 
-\item{geography}{Whether to include all states}
+\item{fred_key}{A fred API key}
 
-\item{demography}{Wheter to include race/ethnicity}
+\item{BLS_key}{A bls API Key}
 }
 \value{
 An xts object with unemployment data

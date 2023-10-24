@@ -8,7 +8,8 @@ get_inflation(
   years = 5,
   monthly = FALSE,
   main_variables = FALSE,
-  fred_key = fredKey
+  fred_key = fredKey,
+  BLS_key = blsKey
 )
 }
 \arguments{
