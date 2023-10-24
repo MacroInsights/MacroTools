@@ -1,8 +1,8 @@
 #' Downloads unemployment data from Fred
 #'
+#' @param fred_key A fred API key
+#' @param BLS_key A bls API Key
 #' @param years Number of years of data to get
-#' @param geography Whether to include all states
-#' @param demography Wheter to include race/ethnicity
 #'
 #' @return An xts object with unemployment data
 #' @export
@@ -11,8 +11,13 @@
 #' unemployment <- get_unemployment()
 get_price_indeces <- memoise::memoise(function(
     years = 5,
-    fred_key = fredKey)
+    fred_key = fredKey,
+    BLS_key = blsKey)
   {
+
+  # Setting FRED API Key
+  fred_key <- gsub("\"", "", fred_key)
+  fredr::fredr_set_key(fred_key)
 
   variables <- dplyr::tribble(~code, ~name,
                         "CPIAUCSL",	      'CPI',
@@ -26,7 +31,6 @@ get_price_indeces <- memoise::memoise(function(
                         "CPIENGSL",	      'Energy',
                         "CUSR0000SACE",	  'Energy commodities',
                         "CUSR0000SETB01",	'Gasoline',
-                        "CUUR0000SEHE",	  'Fuel oil',
                         "CUSR0000SEHF",	  'Energy services',
                         "CUSR0000SEHF01",	'Electricity',
                         "CUSR0000SEHF02",	'Utility gas service',
@@ -55,13 +59,46 @@ get_price_indeces <- memoise::memoise(function(
                                   unit = "weeks") +
                                   lubridate::days(7)), num_series))
 
-  # Actual request of data
+
   raw_data_fred <- purrr::pmap_dfr(
     .l = params,
     .f = ~ fredr::fredr(series_id = ..1,
                  observation_start = ..2, observation_end = ..3)) %>%
     dplyr::select(-c(realtime_start, realtime_end)) |>
     tidyr::pivot_wider(names_from = series_id, values_from = value)
+
+  # Substituting Fuel Oil
+  start_year <- params$observation_start[[1]] %>% lubridate::year()
+  end_year <- params$observation_end[[1]] %>% lubridate::year()
+  api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+  payload <- glue::glue('{
+                    "seriesid":["CUUR0000SEHE01"],
+                    "startyear":"{{start_year}}",
+                    "endyear":"{{end_year}}",
+                    "registrationkey":"{{BLS_key}}"
+                    }', .open="{{", .close="}}")
+
+  response <- httr::POST(api_url,
+                         body = payload,
+                         httr::content_type("application/json"),
+                         encode = "json")
+
+  x <- httr::content(response, "text") %>%
+    jsonlite::fromJSON()
+
+  Fuel_Oil_raw <- x$Results$series$data[[1]] %>%
+    as_tibble()
+
+  # Tidying up the data
+  Fuel_Oil <- Fuel_Oil_raw %>%
+    transmute(date = ym(paste(Fuel_Oil_raw$year,
+                              Fuel_Oil_raw$periodName)),
+              `Fuel Oil` = value %>% as.numeric())
+
+  #Joins BLS
+
+  raw_data_fred %>% left_join(Fuel_Oil,
+                              by=c("date")) -> raw_data_fred
 
   colnames(raw_data_fred)[1:num_series+1] <- variables$name
 

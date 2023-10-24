@@ -13,14 +13,15 @@ get_inflation <- memoise::memoise(function(
     years = 5,
     monthly = FALSE,
     main_variables = FALSE,
-    fred_key = fredKey)
+    fred_key = fredKey,
+    BLS_key = blsKey)
   {
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  prices <- get_price_indeces(years)
+  prices <- get_price_indeces(years + 1)
 
   if(monthly) {
     inflation <- (prices - dplyr::lag(prices, 1)) / dplyr::lag(prices, 1) * 100
@@ -31,7 +32,7 @@ get_inflation <- memoise::memoise(function(
   if(main_variables) {
     inflation <- inflation[,1:5]}
 
-  return(inflation)
+  return(inflation[-1:-12,])
 
 
 }, cache = memoise::cache_memory())
