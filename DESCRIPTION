@@ -26,13 +26,10 @@ Imports:
     gt,
     tcltk,
     webshot2,
-    albersusa,
     httr,
     glue,
     jsonlite,
     tmap
-Remotes:
-    hrbrmstr/albersusa
 Depends: 
     R (>= 3.5)
 LazyData: true
