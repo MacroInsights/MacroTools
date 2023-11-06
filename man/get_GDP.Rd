@@ -9,8 +9,7 @@ get_GDP(
   geography = "National",
   perCapita = FALSE,
   latest = FALSE,
-  fred_key = fredKey,
-  BLS_key = blsKey
+  fred_key = fredKey
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ get_GDP(
 \item{fred_key}{A FRED API}
 
 \item{BLS_key}{A BLS KEy}
-
-\item{demography}{Wheter to include race/ethnicity}
 }
 \value{
 An xts object with unemployment data
