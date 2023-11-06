@@ -2,7 +2,6 @@
 #'
 #' @param years Number of years of data to get
 #' @param geography Whether to include all states
-#' @param demography Wheter to include race/ethnicity
 #' @param latest Gets the latest complete unemployment figures
 #' @param fred_key A FRED API
 #' @param BLS_key A BLS KEy
@@ -17,8 +16,7 @@ get_GDP <- memoise::memoise(function(
     geography = "National",
     perCapita = FALSE,
     latest = FALSE,
-    fred_key = fredKey,
-    BLS_key = blsKey)
+    fred_key = fredKey)
 {
 
 
@@ -49,9 +47,6 @@ get_GDP <- memoise::memoise(function(
     stop("Invalid input for 'geography'.")
   }
 
-  if (demography) {
-    variables <- c(variables,"LNS14000003","LNS14000006","LNS14000009","LNU04032183")
-  }
   num_series <- length(variables)
 
 
@@ -72,47 +67,45 @@ get_GDP <- memoise::memoise(function(
                  observation_start = ..2, observation_end = ..3)) %>%
     dplyr::select(-c(realtime_start, realtime_end)) |>
     tidyr::pivot_wider(names_from = series_id, values_from = value) |>
-    dplyr::rename(USUR = UNRATE)
+    dplyr::rename(RQGDP = GDPC1)
 
-  if(demography) {
-    # Downloading American Indians and Alaska Natives Unemployment
-    start_year <- params$observation_start[[1]] %>% lubridate::year()
-    end_year <- params$observation_end[[1]] %>% lubridate::year()
-    api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
-    payload <- glue::glue('{
-                    "seriesid":["LNU04035243"],
-                    "startyear":"{{start_year}}",
-                    "endyear":"{{end_year}}",
-                    "registrationkey":"{{BLS_key}}"
-                    }', .open="{{", .close="}}")
+  # Subroutine to get GDP per capita
+  # It uses whatever the latest population figures are for the relevant geography
 
-    response <- httr::POST(api_url,
-                     body = payload,
-                     httr::content_type("application/json"),
-                     encode = "json")
+    first_year <- params[[2]][[1]] |> year()
+    last_year <- year(today())
+    pop_data <- NULL
 
-    x <- httr::content(response, "text") %>%
-      jsonlite::fromJSON()
-
-    UR_AIAN_raw <- x$Results$series$data[[1]] %>%
-      as_tibble()
-
-    UR_AIAN <- UR_AIAN_raw %>%
-      transmute(date = ym(paste(UR_AIAN_raw$year,
-                                UR_AIAN_raw$periodName)),
-                ur_AIAN = value %>% as.numeric())
-
-    raw_data_fred %>% left_join(UR_AIAN,
-                                by=c("date")) -> raw_data_fred
-
-    raw_data_fred <- raw_data_fred %>%
-      dplyr::rename(WhiteUR = LNS14000003,
-                    BlackUR = LNS14000006,
-                    HispanicUR = LNS14000009,
-                    AsianUR = LNU04032183,
-                    AIANUR = ur_AIAN)
-
+    for (year in first_year:last_year) {
+      if (year == 2020 | year == 2023) {
+        next  # skip the rest of the loop for this iteration
+      }
+      temp <- get_acs(
+      geography = "state"
+    , variables = 'B01001_001'
+    , survey = 'acs1'
+    , state = states$state
+    , year = year
+    , cache_table = TRUE) %>%
+      mutate(state_abb = fips(as.factor(NAME)),
+             state_abb = fips(state_abb, to = 'Abbreviation')) %>%
+      bind_rows(summarise(.,
+                          across(where(is.numeric), sum),
+                          across(where(is.character), ~"USA"))) |>
+      transmute(state_abb = state_abb, pop = estimate) |>
+      mutate(year = year)
+      pop_data <- bind_rows(pop_data, temp)
     }
+
+
+  left_join(pop_data,
+            raw_data_fred |>
+              tidyr::pivot_longer(-date, names_to = "state", values_to = "RGDP") |>
+              mutate(state_abb = if_else(state != "RQGDP", str_sub(state, 1, 2), "USA"),
+                     year = year(date))
+  )
+
+
 
   # Gets the latest complete unemployment figures
   if(latest) {
