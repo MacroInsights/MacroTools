@@ -50,7 +50,14 @@ get_unemployment <- memoise::memoise(function(
   }
 
   if (demography) {
-    variables <- c(variables,"LNS14000003","LNS14000006","LNS14000009","LNU04032183")
+    variables <- c(variables,"LNS14000003","LNS14000006","LNS14000009","LNU04032183",
+                   "LNS14000028",           # White men
+                   "LNS14000029",           # White women
+                   "LNS14000031",           # Black men
+                   "LNS14000032",           # Black women
+                   "LNU04000034",           # Hispanic men
+                   "LNU04000035"            # Hispanic women
+                   )
   }
   num_series <- length(variables)
 
@@ -109,6 +116,12 @@ get_unemployment <- memoise::memoise(function(
       dplyr::rename(WhiteUR = LNS14000003,
                     BlackUR = LNS14000006,
                     HispanicUR = LNS14000009,
+                    WhiteMenUR = LNS14000028,
+                    WhiteWomenUR = LNS14000029,
+                    BlackMenUR = LNS14000031,
+                    BlackWomen = LNS14000032,
+                    HispanicMenUR = LNU04000034,
+                    HispanicWomenUR = LNU04000035,
                     AsianUR = LNU04032183,
                     AIANUR = ur_AIAN)
 
