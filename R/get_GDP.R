@@ -71,6 +71,7 @@ get_GDP <- memoise::memoise(function(
 
   # Subroutine to get GDP per capita
   # It uses whatever the latest population figures are for the relevant geography
+  if(perCapita) {
 
     first_year <- params[[2]][[1]] |> year()
     last_year <- year(today())
@@ -86,7 +87,7 @@ get_GDP <- memoise::memoise(function(
     , survey = 'acs1'
     , state = states$state
     , year = year
-    , cache_table = TRUE) %>%
+    , cache_table = TRUE) %>% suppressMessages() %>%
       mutate(state_abb = fips(as.factor(NAME)),
              state_abb = fips(state_abb, to = 'Abbreviation')) %>%
       bind_rows(summarise(.,
@@ -97,15 +98,33 @@ get_GDP <- memoise::memoise(function(
       pop_data <- bind_rows(pop_data, temp)
     }
 
+  if(geography == "State") {
 
-  left_join(pop_data,
-            raw_data_fred |>
-              tidyr::pivot_longer(-date, names_to = "state", values_to = "RGDP") |>
-              mutate(state_abb = if_else(state != "RQGDP", str_sub(state, 1, 2), "USA"),
-                     year = year(date))
-  )
+    raw_data_fred <- left_join(pop_data,
+                               raw_data_fred |>
+                                 tidyr::pivot_longer(-date,
+                                                     names_to = "state",
+                                                     values_to = "RGDP") |>
+                                 mutate(state_abb = if_else(state != "RQGDP",
+                                                            str_sub(state, 1, 2), "USA"),
+                                        year = year(date))) %>%
+      mutate(RGDPPC = if_else(state_abb != "USA", RGDP/pop*1000000,RGDP/pop*1000000000)) %>%
+      select(date, state,RGDPPC) %>%
+      pivot_wider(names_from = state, values_from = RGDPPC, names_glue = "{state}_PC") }
+    else {
+      raw_data_fred <- left_join(pop_data %>% filter(state_abb == 'USA'),
+                                 raw_data_fred |>
+                                   tidyr::pivot_longer(-date,
+                                                       names_to = "state",
+                                                       values_to = "RGDP") %>%
+                                   mutate(state_abb = "USA",
+                                          year = year(date))) %>%
+        mutate(RGDPPC = RGDP/pop*1000000000) %>%
+        select(date, state,RGDPPC) %>%
+        pivot_wider(names_from = state, values_from = RGDPPC, names_glue = "{state}_PC")
+      }
 
-
+}
 
   # Gets the latest complete unemployment figures
   if(latest) {
