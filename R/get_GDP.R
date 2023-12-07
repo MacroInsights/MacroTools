@@ -1,24 +1,22 @@
-#' Downloads unemployment data from Fred
+#' Downloads Real GDP from Fred for the US, all US States, or a selection of states.
 #'
 #' @param years Number of years of data to get
-#' @param geography Whether to include all states
-#' @param latest Gets the latest complete unemployment figures
+#' @param geography 'National' (default), 'State', or list of states like c("DC","NM")
+#' @param latest Gets the latest complete GDP figures
 #' @param fred_key A FRED API
-#' @param BLS_key A BLS KEy
 #'
-#' @return An xts object with unemployment data
+#' @return An xts object with GDP data
 #' @export
 #'
 #' @examples
-#' unemployment <- get_unemployment()
+#' real_GDP <- get_GDP()
+#' states_real_GDP <- get_GDP(geography = c("DC","NC"), latest = TRUE)
 get_GDP <- memoise::memoise(function(
     years = 5,
     geography = "National",
-    perCapita = FALSE,
     latest = FALSE,
     fred_key = fredKey)
 {
-
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
@@ -71,10 +69,12 @@ get_GDP <- memoise::memoise(function(
 
   # Subroutine to get GDP per capita
   # It uses whatever the latest population figures are for the relevant geography
+  perCapita <- FALSE
+
   if(perCapita) {
 
-    first_year <- params[[2]][[1]] |> year()
-    last_year <- year(today())
+    first_year <- params[[2]][[1]] |> lubridate::year()
+    last_year <- lubridate::year(lubridate::today())
     pop_data <- NULL
 
     for (year in first_year:last_year) {
@@ -88,13 +88,13 @@ get_GDP <- memoise::memoise(function(
     , state = states$state
     , year = year
     , cache_table = TRUE) %>% suppressMessages() %>%
-      mutate(state_abb = fips(as.factor(NAME)),
+      dplyr::mutate(state_abb = fips(as.factor(NAME)),
              state_abb = fips(state_abb, to = 'Abbreviation')) %>%
       bind_rows(summarise(.,
                           across(where(is.numeric), sum),
                           across(where(is.character), ~"USA"))) |>
       transmute(state_abb = state_abb, pop = estimate) |>
-      mutate(year = year)
+      dplyr::mutate(year = year)
       pop_data <- bind_rows(pop_data, temp)
     }
 

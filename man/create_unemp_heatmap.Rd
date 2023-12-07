@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_unemp_heatmap.R
 \name{create_unemp_heatmap}
 \alias{create_unemp_heatmap}
-\title{Creates a Heatmap of Unemployment in the United States}
+\title{Creates a Heatmap of Unemployment in the United States in the style of a stock market board}
 \usage{
 create_unemp_heatmap(
   fred_key = fredKey,
@@ -21,7 +21,7 @@ create_unemp_heatmap(
 A PNG Table
 }
 \description{
-Creates a Heatmap of Unemployment in the United States
+Creates a Heatmap of Unemployment in the United States in the style of a stock market board
 }
 \examples{
 create_unemp_heatmap()

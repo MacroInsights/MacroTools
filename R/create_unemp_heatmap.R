@@ -1,4 +1,4 @@
-#' Creates a Heatmap of Unemployment in the United States
+#' Creates a Heatmap of Unemployment in the United States in the style of a stock market board
 #'
 #' @param fred_key A FRED API KEy
 #' @param color_up A color for when unemployment increases
@@ -32,7 +32,7 @@ create_unemp_heatmap <- function(
     data <- data |> dplyr::filter(Year > first_year)
   }
 
-  data <- data |> dplyr::mutate(change = USUR - lag(USUR)) %>%
+  data <- data |> dplyr::mutate(change = USUR - dplyr::lag(USUR)) %>%
     dplyr::mutate(change = dplyr::if_else(change > 0, 1, -1))
 
   table_data <- data |>
@@ -54,7 +54,7 @@ create_unemp_heatmap <- function(
     gt::sub_missing(missing_text = "") |>
     gt::data_color(columns =  c(Chg_2014:Chg_2023), target_columns = c(2:11),
                palette = c(color_down,color_up),
-               na_color = "black") %>%
+               na_color = "black") |>
     gt::tab_options(table.background.color = "black",
                 table.border.top.width=0,
                 column_labels.padding = gt::px(35),
@@ -79,13 +79,13 @@ create_unemp_heatmap <- function(
     ) |>
     gt::opt_horizontal_padding(scale = 3) |>
     gt::opt_vertical_padding(scale = 1.3)  %>%
-    # gt::grand_summary_rows(
-    #   columns = c(2:11),
-    #   fns = list(
-    #     Yearly ~ mean(., na.rm = TRUE)
-    #   ),
-    #   fmt = ~ gt::fmt_number(., use_seps = FALSE)
-    # ) %>%
+     gt::grand_summary_rows(
+       columns = c(2:11),
+       fns = list(
+         Yearly ~ mean(., na.rm = TRUE)
+       ),
+       fmt = ~ gt::fmt_number(., use_seps = FALSE)
+     ) %>%
     gt::tab_header(
       title = "Unemployment Rate") %>%
     gt::gtsave("unemp_heatmap.png")

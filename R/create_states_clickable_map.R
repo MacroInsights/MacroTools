@@ -1,4 +1,4 @@
-#' Creates a Clickable Map of the United States
+#' Creates a Clickable Map of the United States. It requires a CSV file that contains a list of the states and their respective URLs.
 #'
 #' @param states_urls A CSV File containing the URLs for state fact sheets
 #' @param fred_key A FRED API Key

@@ -1,4 +1,4 @@
-#' A script to create a heatmap of the United States Unemployment Rate
+#' Creates a heatmap of the United States Unemployment Rate using the latest available information of unemployment rates.
 #'
 #' @param fred_key
 #'
@@ -34,9 +34,8 @@ create_states_unemp_heatmap <- function(
 
   states_data <- states_ur |>
     dplyr::mutate(estimate = unemployment - UR)
-states_geo <- albersusa::usa_sf("lcc") %>%
-  filter(!iso_3166_2 %in% c('AS', 'GU', 'MP', 'PR'))
-states_map <- states_geo %>% inner_join(states_data)
+states_geo <- albersusa::usa_sf("lcc")
+states_map <- states_geo %>% dplyr::inner_join(states_data)
 
 
 

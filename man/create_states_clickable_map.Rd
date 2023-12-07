@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_states_clickable_map.R
 \name{create_states_clickable_map}
 \alias{create_states_clickable_map}
-\title{Creates a Clickable Map of the United States}
+\title{Creates a Clickable Map of the United States. It requires a CSV file that contains a list of the states and their respective URLs.}
 \usage{
 create_states_clickable_map(
   states_urls = choose.files(caption = "Select CSV file containing State URLs", multi =
@@ -19,7 +19,7 @@ create_states_clickable_map(
 an HTML Map
 }
 \description{
-Creates a Clickable Map of the United States
+Creates a Clickable Map of the United States. It requires a CSV file that contains a list of the states and their respective URLs.
 }
 \examples{
 create_states_clickable_map()

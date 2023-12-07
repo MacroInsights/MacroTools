@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_states_unemp_heatmap.R
 \name{create_states_unemp_heatmap}
 \alias{create_states_unemp_heatmap}
-\title{A script to create a heatmap of the United States Unemployment Rate}
+\title{Creates a heatmap of the United States Unemployment Rate using the latest available information of unemployment rates.}
 \usage{
 create_states_unemp_heatmap(fred_key = fredKey)
 }
@@ -13,7 +13,7 @@ create_states_unemp_heatmap(fred_key = fredKey)
 A PNG
 }
 \description{
-A script to create a heatmap of the United States Unemployment Rate
+Creates a heatmap of the United States Unemployment Rate using the latest available information of unemployment rates.
 }
 \examples{
 create_states_unemp_heatmap
