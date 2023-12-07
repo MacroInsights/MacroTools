@@ -1,10 +1,10 @@
 Package: JECTools
-Title: What the Package Does (One Line, Title Case)
+Title: A Compendium of Tools and Packages for Macroecononomic Analysis
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Romero", "Alfredo", , "eldoctorromero@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7241-0824"))
+Description: This is a collection of tools and packages to conduct macroeconomic analysis using United States data. It relies heavily in other packages.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -24,7 +24,6 @@ Imports:
     cdlTools,
     leaflet,
     gt,
-    tcltk,
     webshot2,
     httr,
     glue,
