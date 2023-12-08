@@ -34,7 +34,22 @@ create_states_unemp_heatmap <- function(
 
   states_data <- states_ur |>
     dplyr::mutate(estimate = unemployment - UR)
-states_geo <- albersusa::usa_sf("lcc")
+
+  # For 2021, I'm using ACS 1-year.
+  states_geo <- get_acs(
+    geography = "state",
+    variables = c(households2021 = "B11012_001"),
+    survey = "acs1",
+    year = 2021,
+    state = c(state.abb,"DC"),
+    geometry = TRUE,
+    cache_table = TRUE,
+    output = "wide"
+  )
+  states_geo <- tigris::shift_geometry(states_geo)
+  states_geo <- states_geo |> mutate(name = NAME)
+
+
 states_map <- states_geo %>% dplyr::inner_join(states_data)
 
 
@@ -43,7 +58,7 @@ states_map <- states_geo %>% dplyr::inner_join(states_data)
 tmap::tmap_options(check.and.fix = TRUE)
 statesMap <- states_map |> tmap::tm_shape() +
   tmap::tm_borders(col = "white") +
-  tmap::tm_text("iso_3166_2", size = .4, auto.placement = TRUE) +
+  tmap::tm_text("abb", size = .4, auto.placement = TRUE) +
   tmap::tm_fill("estimate", title = paste0("Percentage Points from the National ",
                                      UR,"% Unemployment Rate"),style = "fixed",
           breaks = c(-Inf,-1,-.5,0,.5,1,1.5,Inf),
