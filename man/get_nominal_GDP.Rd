@@ -2,12 +2,11 @@
 % Please edit documentation in R/get_nominal_GDP.R
 \name{get_nominal_GDP}
 \alias{get_nominal_GDP}
-\title{Downloads unemployment data from Fred}
+\title{Downloads Real GDP from Fred for the US, all US States, or a selection of states.}
 \usage{
 get_nominal_GDP(
   years = 5,
   geography = "National",
-  perCapita = FALSE,
   latest = FALSE,
   fred_key = fredKey
 )
@@ -15,20 +14,19 @@ get_nominal_GDP(
 \arguments{
 \item{years}{Number of years of data to get}
 
-\item{geography}{Whether to include all states}
+\item{geography}{'National' (default), 'State', or list of states like c("DC","NM")}
 
-\item{latest}{Gets the latest complete unemployment figures}
+\item{latest}{Gets the latest complete GDP figures}
 
 \item{fred_key}{A FRED API}
-
-\item{BLS_key}{A BLS KEy}
 }
 \value{
-An xts object with unemployment data
+An xts object with GDP data
 }
 \description{
-Downloads unemployment data from Fred
+Downloads Real GDP from Fred for the US, all US States, or a selection of states.
 }
 \examples{
-unemployment <- get_unemployment()
+nominal_GDP <- get_nominal_GDP()
+states_nominal_GDP <- get_nominal_GDP(geography = c("DC","NC"), latest = TRUE)
 }

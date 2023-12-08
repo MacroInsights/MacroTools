@@ -1,20 +1,19 @@
-#' Downloads unemployment data from Fred
+#' Downloads Real GDP from Fred for the US, all US States, or a selection of states.
 #'
 #' @param years Number of years of data to get
-#' @param geography Whether to include all states
-#' @param latest Gets the latest complete unemployment figures
+#' @param geography 'National' (default), 'State', or list of states like c("DC","NM")
+#' @param latest Gets the latest complete GDP figures
 #' @param fred_key A FRED API
-#' @param BLS_key A BLS KEy
 #'
-#' @return An xts object with unemployment data
+#' @return An xts object with GDP data
 #' @export
 #'
 #' @examples
-#' unemployment <- get_unemployment()
+#' nominal_GDP <- get_nominal_GDP()
+#' states_nominal_GDP <- get_nominal_GDP(geography = c("DC","NC"), latest = TRUE)
 get_nominal_GDP <- memoise::memoise(function(
     years = 5,
     geography = "National",
-    perCapita = FALSE,
     latest = FALSE,
     fred_key = fredKey)
 {
@@ -71,6 +70,9 @@ get_nominal_GDP <- memoise::memoise(function(
 
   # Subroutine to get GDP per capita
   # It uses whatever the latest population figures are for the relevant geography
+
+  perCapita <- FALSE
+
   if(perCapita) {
 
     first_year <- params[[2]][[1]] |> year()

@@ -2,7 +2,30 @@
 % Please edit documentation in R/get_inflation.R
 \name{get_inflation}
 \alias{get_inflation}
-\title{Downloads unemployment data from Fred}
+\title{Computes inflation data. The default yields five years of monthly YoY inflation of:
+"CPIAUCSL",	      'CPI',
+"CPILFESL",	      'Core CPI',
+"PCEPI",	          'PCE',
+"PCEPILFE",	      'Core PCE',
+"PPIFIS",	        'Producer Price Index',
+"CPIUFDSL",	      'Food',
+"CUSR0000SAF11",	  'Food at home',
+"CUSR0000SEFV",	  'Food away',
+"CPIENGSL",	      'Energy',
+"CUSR0000SACE",	  'Energy commodities',
+"CUSR0000SETB01",	'Gasoline',
+"CUSR0000SEHF",	  'Energy services',
+"CUSR0000SEHF01",	'Electricity',
+"CUSR0000SEHF02",	'Utility gas service',
+"CUSR0000SACL1E",	'Commodities less food and energy',
+"CUSR0000SETA01",	'New vehicles',
+"CUSR0000SETA02",	'Used cars and trucks',
+"CPIAPPSL",	      'Apparel',
+"CUSR0000SAM1",	  'Medical care commodities',
+"CUSR0000SASLE",	  'Services less energy',
+"CUSR0000SAH1",	  'Shelter',
+"CUSR0000SAS4",	  'Transportation',
+"CUSR0000SAM2",	  'Medical care services')}
 \usage{
 get_inflation(
   years = 5,
@@ -15,16 +38,40 @@ get_inflation(
 \arguments{
 \item{years}{Number of years of data to get}
 
-\item{geography}{Whether to include all states}
+\item{monthly}{Whether to calculate MoM \% Change}
 
-\item{demography}{Wheter to include race/ethnicity}
+\item{main_variables}{Whether to include only CPI, Core CPI, PCE, Core PCE, andProducer Price Index}
 }
 \value{
-An xts object with unemployment data
+An xts object with inflation data
 }
 \description{
-Downloads unemployment data from Fred
+Computes inflation data. The default yields five years of monthly YoY inflation of:
+"CPIAUCSL",	      'CPI',
+"CPILFESL",	      'Core CPI',
+"PCEPI",	          'PCE',
+"PCEPILFE",	      'Core PCE',
+"PPIFIS",	        'Producer Price Index',
+"CPIUFDSL",	      'Food',
+"CUSR0000SAF11",	  'Food at home',
+"CUSR0000SEFV",	  'Food away',
+"CPIENGSL",	      'Energy',
+"CUSR0000SACE",	  'Energy commodities',
+"CUSR0000SETB01",	'Gasoline',
+"CUSR0000SEHF",	  'Energy services',
+"CUSR0000SEHF01",	'Electricity',
+"CUSR0000SEHF02",	'Utility gas service',
+"CUSR0000SACL1E",	'Commodities less food and energy',
+"CUSR0000SETA01",	'New vehicles',
+"CUSR0000SETA02",	'Used cars and trucks',
+"CPIAPPSL",	      'Apparel',
+"CUSR0000SAM1",	  'Medical care commodities',
+"CUSR0000SASLE",	  'Services less energy',
+"CUSR0000SAH1",	  'Shelter',
+"CUSR0000SAS4",	  'Transportation',
+"CUSR0000SAM2",	  'Medical care services')
 }
 \examples{
-unemployment <- get_unemployment()
+inflation <- get_inflation()
+inflationMoM <- get_inflation(monthly = TRUE, main_variables = TRUE)
 }

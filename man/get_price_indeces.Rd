@@ -2,7 +2,30 @@
 % Please edit documentation in R/get_price_indeces.R
 \name{get_price_indeces}
 \alias{get_price_indeces}
-\title{Downloads unemployment data from Fred}
+\title{Downloads the following price indexes data from Fred and the BLS:
+"CPIAUCSL",	      'CPI',
+"CPILFESL",	      'Core CPI',
+"PCEPI",	          'PCE',
+"PCEPILFE",	      'Core PCE',
+"PPIFIS",	        'Producer Price Index',
+"CPIUFDSL",	      'Food',
+"CUSR0000SAF11",	  'Food at home',
+"CUSR0000SEFV",	  'Food away',
+"CPIENGSL",	      'Energy',
+"CUSR0000SACE",	  'Energy commodities',
+"CUSR0000SETB01",	'Gasoline',
+"CUSR0000SEHF",	  'Energy services',
+"CUSR0000SEHF01",	'Electricity',
+"CUSR0000SEHF02",	'Utility gas service',
+"CUSR0000SACL1E",	'Commodities less food and energy',
+"CUSR0000SETA01",	'New vehicles',
+"CUSR0000SETA02",	'Used cars and trucks',
+"CPIAPPSL",	      'Apparel',
+"CUSR0000SAM1",	  'Medical care commodities',
+"CUSR0000SASLE",	  'Services less energy',
+"CUSR0000SAH1",	  'Shelter',
+"CUSR0000SAS4",	  'Transportation',
+"CUSR0000SAM2",	  'Medical care services')}
 \usage{
 get_price_indeces(years = 5, fred_key = fredKey, BLS_key = blsKey)
 }
@@ -17,8 +40,31 @@ get_price_indeces(years = 5, fred_key = fredKey, BLS_key = blsKey)
 An xts object with unemployment data
 }
 \description{
-Downloads unemployment data from Fred
+Downloads the following price indexes data from Fred and the BLS:
+"CPIAUCSL",	      'CPI',
+"CPILFESL",	      'Core CPI',
+"PCEPI",	          'PCE',
+"PCEPILFE",	      'Core PCE',
+"PPIFIS",	        'Producer Price Index',
+"CPIUFDSL",	      'Food',
+"CUSR0000SAF11",	  'Food at home',
+"CUSR0000SEFV",	  'Food away',
+"CPIENGSL",	      'Energy',
+"CUSR0000SACE",	  'Energy commodities',
+"CUSR0000SETB01",	'Gasoline',
+"CUSR0000SEHF",	  'Energy services',
+"CUSR0000SEHF01",	'Electricity',
+"CUSR0000SEHF02",	'Utility gas service',
+"CUSR0000SACL1E",	'Commodities less food and energy',
+"CUSR0000SETA01",	'New vehicles',
+"CUSR0000SETA02",	'Used cars and trucks',
+"CPIAPPSL",	      'Apparel',
+"CUSR0000SAM1",	  'Medical care commodities',
+"CUSR0000SASLE",	  'Services less energy',
+"CUSR0000SAH1",	  'Shelter',
+"CUSR0000SAS4",	  'Transportation',
+"CUSR0000SAM2",	  'Medical care services')
 }
 \examples{
-unemployment <- get_unemployment()
+price_indeces <- get_price_indeces()
 }
