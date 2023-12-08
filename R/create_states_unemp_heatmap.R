@@ -36,7 +36,7 @@ create_states_unemp_heatmap <- function(
     dplyr::mutate(estimate = unemployment - UR)
 
   # For 2021, I'm using ACS 1-year.
-  states_geo <- get_acs(
+  states_geo <- tidycensus::get_acs(
     geography = "state",
     variables = c(households2021 = "B11012_001"),
     survey = "acs1",
@@ -47,7 +47,7 @@ create_states_unemp_heatmap <- function(
     output = "wide"
   )
   states_geo <- tigris::shift_geometry(states_geo)
-  states_geo <- states_geo |> mutate(name = NAME)
+  states_geo <- states_geo |> dplyr::mutate(name = NAME)
 
 
 states_map <- states_geo %>% dplyr::inner_join(states_data)
