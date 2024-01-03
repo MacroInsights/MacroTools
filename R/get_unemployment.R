@@ -119,7 +119,7 @@ get_unemployment <- memoise::memoise(function(
                     WhiteMenUR = LNS14000028,
                     WhiteWomenUR = LNS14000029,
                     BlackMenUR = LNS14000031,
-                    BlackWomen = LNS14000032,
+                    BlackWomenUR = LNS14000032,
                     HispanicMenUR = LNU04000034,
                     HispanicWomenUR = LNU04000035,
                     AsianUR = LNU04032183,
