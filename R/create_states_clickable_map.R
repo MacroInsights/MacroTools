@@ -53,8 +53,29 @@ create_states_clickable_map <- function(
   states_urls <- readr::read_csv(states_urls, show_col_types = FALSE)
   # Merges the unemploymend and urls data
   states_data <- states_urls %>% dplyr::inner_join(states_ur)
+
+  ####################################################################
+  # THIS JUST DOWNLOADS A MAP FROM TIDYCENSUS AND SHIFTS THE GEOGRAPHY
+  # For 2021, I'm using ACS 1-year.
+  states_geo <- tidycensus::get_acs(
+    geography = "state",
+    variables = c(households2021 = "B11012_001"),
+    survey = "acs1",
+    year = 2021,
+    state = c(state.abb,"DC"),
+    geometry = TRUE,
+    cache_table = TRUE,
+    output = "wide"
+  )
+  states_geo <- tigris::shift_geometry(states_geo)
+  states_geo <- states_geo |> dplyr::mutate(name = NAME)
+  ###################################################################
+
+
+
   # Merges the states data with geography
-  states_map <- albersusa::usa_sf("lcc") %>% dplyr::inner_join(states_data)
+  # states_map <- albersusa::usa_sf("lcc") %>% dplyr::inner_join(states_data)
+  states_map <- states_geo %>% dplyr::inner_join(states_data)
 
   # Colors
   # Sets the heatmap to Blue by quantiles
