@@ -50,7 +50,11 @@ get_unemployment <- memoise::memoise(function(
   }
 
   if (demography) {
-    variables <- c(variables,"LNS14000003","LNS14000006","LNS14000009","LNU04032183",
+    variables <- c(variables,
+                   "LNS14000003",           # White
+                   "LNS14000006",           # Black
+                   "LNS14000009",           # Hispanic
+                   "LNU04032183",           # Asian (NSA)
                    "LNS14000028",           # White men
                    "LNS14000029",           # White women
                    "LNS14000031",           # Black men
