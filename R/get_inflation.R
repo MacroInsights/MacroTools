@@ -45,12 +45,13 @@ get_inflation <- memoise::memoise(function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  prices <- get_price_indeces(years + 1)
+  pricesM <- get_price_indeces(years + 1)
+  pricesY <- get_price_indeces_nsa(years + 1)
 
   if(monthly) {
-    inflation <- (prices - dplyr::lag(prices, 1)) / dplyr::lag(prices, 1) * 100
+    inflation <- (pricesM - dplyr::lag(pricesM, 1)) / dplyr::lag(pricesM, 1) * 100
   } else {
-    inflation <- (prices - dplyr::lag(prices, 12)) / dplyr::lag(prices, 12) * 100
+    inflation <- (pricesY - dplyr::lag(pricesY, 12)) / dplyr::lag(pricesY, 12) * 100
   }
 
   if(main_variables) {
