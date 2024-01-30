@@ -101,19 +101,19 @@ get_unemployment <- memoise::memoise(function(
       "LNU04035243", "AIANUR_NS")
     code_vector <- as.character(demo_variables$seriesID)
 
-    payload <- glue('{
+    payload <- glue::glue('{
   "seriesid":{{jsonlite::toJSON(code_vector)}},
   "startyear":"{{start_year}}",
   "endyear":"{{end_year}}",
   "registrationkey":"{{blsKey}}"
 }', .open="{{", .close="}}")
 
-    response <- POST(api_url,
+    response <- httr::POST(api_url,
                      body = payload,
-                     content_type("application/json"),
+                     httr::content_type("application/json"),
                      encode = "json")
 
-    raw_data <- content(response, "text", encoding = "UTF-8") %>%
+    raw_data <- httr::content(response, "text", encoding = "UTF-8") %>%
       jsonlite::fromJSON()
 
     # Combine all the data in long form:
@@ -140,10 +140,10 @@ get_unemployment <- memoise::memoise(function(
                                 by=c("date")) -> raw_data_fred
 
     raw_data_fred <- raw_data_fred %>%
-      dplyr::rename(WhiteUR = LNS14000003,
-                    BlackUR = LNS14000006,
-                    HispanicUR = LNS14000009,
-                    AsianUR = LNU04032183
+      dplyr::rename(WhiteUR_SA = LNS14000003,
+                    BlackUR_SA = LNS14000006,
+                    HispanicUR_SA = LNS14000009,
+                    AsianUR_NS = LNU04032183
       )
 
 
