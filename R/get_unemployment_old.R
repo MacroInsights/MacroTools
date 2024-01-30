@@ -51,10 +51,16 @@ get_unemployment <- memoise::memoise(function(
 
   if (demography) {
     variables <- c(variables,
-                   "LNS14000003",     # White UR
-                   "LNS14000006",     # Black UR
-                   "LNS14000009",     # Hispanic UR
-                   "LNU04032183"      # Asian UR
+                   "LNS14000003",           # White
+                   "LNS14000006",           # Black
+                   "LNS14000009",           # Hispanic
+                   "LNU04032183",           # Asian (NSA)
+                   "LNS14000028",           # White men
+                   "LNS14000029",           # White women
+                   "LNS14000031",           # Black men
+                   "LNS14000032",           # Black women
+                   "LNU04000034",           # Hispanic men
+                   "LNU04000035"            # Hispanic women
                    )
   }
   num_series <- length(variables)
@@ -84,68 +90,44 @@ get_unemployment <- memoise::memoise(function(
     start_year <- params$observation_start[[1]] %>% lubridate::year()
     end_year <- params$observation_end[[1]] %>% lubridate::year()
     api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+    payload <- glue::glue('{
+                    "seriesid":["LNU04035243"],
+                    "startyear":"{{start_year}}",
+                    "endyear":"{{end_year}}",
+                    "registrationkey":"{{BLS_key}}"
+                    }', .open="{{", .close="}}")
 
-    # Specifying the payload
-    demo_variables <- tribble(
-      ~seriesID, ~name,
-      "LNS14000004", "WhiteMenUR_SA",
-      "LNS14000005", "WhiteWomenUR_SA",
-      "LNS14000007", "BlackMenUR_SA",
-      "LNS14000008", "BlackWomenUR_SA",
-      "LNU04000004", "WhiteMenUR_NS",
-      "LNU04000005", "WhiteWomenUR_NS",
-      "LNU04000007", "BlackMenUR_NS",
-      "LNU04000008", "BlackWomenUR_NS",
-      "LNU04000010", "HispanicMenUR_NS",
-      "LNU04000011", "HispanicWomenUR_NS",
-      "LNU04035243", "AIANUR_NS")
-    code_vector <- as.character(demo_variables$seriesID)
-
-    payload <- glue('{
-  "seriesid":{{jsonlite::toJSON(code_vector)}},
-  "startyear":"{{start_year}}",
-  "endyear":"{{end_year}}",
-  "registrationkey":"{{blsKey}}"
-}', .open="{{", .close="}}")
-
-    response <- POST(api_url,
+    response <- httr::POST(api_url,
                      body = payload,
-                     content_type("application/json"),
+                     httr::content_type("application/json"),
                      encode = "json")
 
-    raw_data <- content(response, "text", encoding = "UTF-8") %>%
+    x <- httr::content(response, "text") %>%
       jsonlite::fromJSON()
 
-    # Combine all the data in long form:
-    df_raw <- raw_data$Results$series |>
-      rowwise() |>
-      mutate(data = list(
-        data |>
-          transmute(date = as.numeric(year),
-                    value = as.numeric(value),
-                    period = periodName) |>
-          mutate(seriesID = first(seriesID)))) |>
-      pull(data) %>%
-      map_dfr(~ .x)
+    UR_AIAN_raw <- x$Results$series$data[[1]] %>%
+      as_tibble()
 
-    df_tidy <- df_raw %>% as_tibble() %>%
-      mutate(date = ym(paste(df_raw$date,
-                             df_raw$period))) %>%
-      select(date, value, seriesID) %>%
-      left_join(demo_variables) %>%
-      select(-seriesID) %>%
-      pivot_wider(names_from = name, values_from = value)
+    UR_AIAN <- UR_AIAN_raw %>%
+      transmute(date = ym(paste(UR_AIAN_raw$year,
+                                UR_AIAN_raw$periodName)),
+                ur_AIAN = value %>% as.numeric())
 
-    raw_data_fred %>% left_join(df_tidy,
+    raw_data_fred %>% left_join(UR_AIAN,
                                 by=c("date")) -> raw_data_fred
 
     raw_data_fred <- raw_data_fred %>%
       dplyr::rename(WhiteUR = LNS14000003,
                     BlackUR = LNS14000006,
                     HispanicUR = LNS14000009,
-                    AsianUR = LNU04032183
-      )
-
+                    WhiteMenUR = LNS14000028,
+                    WhiteWomenUR = LNS14000029,
+                    BlackMenUR = LNS14000031,
+                    BlackWomenUR = LNS14000032,
+                    HispanicMenUR = LNU04000034,
+                    HispanicWomenUR = LNU04000035,
+                    AsianUR = LNU04032183,
+                    AIANUR = ur_AIAN)
 
     }
 
