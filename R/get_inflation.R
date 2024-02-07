@@ -45,8 +45,8 @@ get_inflation <- memoise::memoise(function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  pricesM <- get_price_indeces(years + 1)
-  pricesY <- get_price_indeces_nsa(years + 1)
+  pricesM <- JECTools::get_price_indeces(years + 1)
+  pricesY <- JECTools::get_price_indeces_nsa(years + 1)
 
   if(monthly) {
     inflation <- (pricesM - dplyr::lag(pricesM, 1)) / dplyr::lag(pricesM, 1) * 100

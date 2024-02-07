@@ -110,17 +110,17 @@ get_price_indeces <- memoise::memoise(function(
     jsonlite::fromJSON()
 
   Fuel_Oil_raw <- x$Results$series$data[[1]] %>%
-    as_tibble()
+    dplyr::as_tibble()
 
   # Tidying up the data
   Fuel_Oil <- Fuel_Oil_raw %>%
-    transmute(date = ym(paste(Fuel_Oil_raw$year,
+    dplyr::transmute(date = lubridate::ym(paste(Fuel_Oil_raw$year,
                               Fuel_Oil_raw$periodName)),
               `Fuel Oil` = value %>% as.numeric())
 
   #Joins BLS
 
-  raw_data_fred %>% left_join(Fuel_Oil,
+  raw_data_fred %>% dplyr::left_join(Fuel_Oil,
                               by=c("date")) -> raw_data_fred
 
   colnames(raw_data_fred)[1:num_series+1] <- variables$name
