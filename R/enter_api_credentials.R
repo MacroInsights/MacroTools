@@ -8,94 +8,62 @@
 #'
 #' @examples
 #' enter_api_credentials()
-enter_api_credentials <- function(fredKey = Sys.getenv("FRED_API_KEY"),
-                                  blsKey = Sys.getenv("BLS_API_KEY"),
-                                  overwrite = FALSE, install = FALSE)
-{
-  bls_api_key <- function(key = blsKey, overwrite, install) {
+enter_api_credentials <- function(fred_api_key = NULL, bls_api_key = NULL) {
 
-  if (install) {
-    home <- Sys.getenv("HOME")
-    renv <- file.path(home, ".Renviron")
-    if(file.exists(renv)){
-      # Backup original .Renviron before doing anything else here.
-      file.copy(renv, file.path(home, ".Renviron_backup"))
-    }
-    if(!file.exists(renv)){
-      file.create(renv)
-    }
-    else{
-      if(isTRUE(overwrite)){
-        message("Your original .Renviron will be backed up and stored in your R HOME directory if needed.")
-        oldenv=read.table(renv, stringsAsFactors = FALSE)
-        newenv <- oldenv[-grep("BLS_API_KEY", oldenv),]
-        write.table(newenv, renv, quote = FALSE, sep = "\n",
-                    col.names = FALSE, row.names = FALSE)
-      }
-      else{
-        tv <- readLines(renv)
-        if(any(grepl("BLS_API_KEY",tv))){
-          stop("A BLS_API_KEY already exists. You can overwrite it with the argument overwrite=TRUE", call.=FALSE)
-        }
+  update_renviron_contents <- function(contents, key, value) {
+    key_pattern <- paste("^", key, "=", sep="")
+    matched = FALSE
+
+    for (i in seq_along(contents)) {
+      if (grepl(key_pattern, contents[i])) {
+        contents[i] <- paste(key, "=", value, sep="")
+        matched = TRUE
+        break
       }
     }
 
-    keyconcat <- paste0("BLS_API_KEY='", key, "'")
-    # Append API key to .Renviron file
-    write(keyconcat, renv, sep = "\n", append = TRUE)
-    message('Your API key has been stored in your .Renviron and can be accessed by Sys.getenv("BLS_API_KEY"). \nTo use now, restart R or run `readRenviron("~/.Renviron")`')
-    return(key)
+    if (!matched) {
+      contents <- c(contents, paste(key, "=", value, sep=""))
+    }
+
+    return(contents)
+  }
+
+
+  api_keys <- list(FRED_API_KEY = fred_api_key, BLS_API_KEY = bls_api_key)
+  renviron_path <- file.path(normalizePath("~"), ".Renviron")
+
+  # Attempt to read the existing .Renviron file, if it exists
+  if (file.exists(renviron_path)) {
+    renviron_contents <- readLines(renviron_path, warn = FALSE)
   } else {
-    message("To install your BLS API key for use in future sessions, run this function with `install = TRUE`.")
-    Sys.setenv(BLS_API_KEY = key)
-  }
+    renviron_contents <- character()
   }
 
-  fred_api_key <- function(key = fredKey, overwrite, install) {
+  for (api_key_name in names(api_keys)) {
+    new_value <- api_keys[[api_key_name]]
+    existing_value <- Sys.getenv(api_key_name)
 
-    if (install) {
-      home <- Sys.getenv("HOME")
-      renv <- file.path(home, ".Renviron")
-      if(file.exists(renv)){
-        # Backup original .Renviron before doing anything else here.
-        file.copy(renv, file.path(home, ".Renviron_backup"))
-      }
-      if(!file.exists(renv)){
-        file.create(renv)
-      }
-      else{
-        if(isTRUE(overwrite)){
-          message("Your original .Renviron will be backed up and stored in your R HOME directory if needed.")
-          oldenv=read.table(renv, stringsAsFactors = FALSE)
-          newenv <- oldenv[-grep("FRED_API_KEY", oldenv),]
-          write.table(newenv, renv, quote = FALSE, sep = "\n",
-                      col.names = FALSE, row.names = FALSE)
-        }
-        else{
-          tv <- readLines(renv)
-          if(any(grepl("FRED_API_KEY",tv))){
-            stop("A FRED_API_KEY already exists. You can overwrite it with the argument overwrite=TRUE", call.=FALSE)
-          }
-        }
-      }
-
-      keyconcat <- paste0("FRED_API_KEY='", key, "'")
-      # Append API key to .Renviron file
-      write(keyconcat, renv, sep = "\n", append = TRUE)
-      message('Your API key has been stored in your .Renviron and can be accessed by Sys.getenv("FRED_API_KEY"). \nTo use now, restart R or run `readRenviron("~/.Renviron")`')
-      return(key)
+    if (!is.null(new_value)) {
+      # Correctly use Sys.setenv to dynamically set an environment variable
+      Sys.setenv(api_key_name = new_value)
+      message(paste(api_key_name, "will be updated."))
+      renviron_contents <- update_renviron_contents(renviron_contents, api_key_name, new_value)
+    } else if (existing_value == "") {
+      new_value <- readline(prompt = paste("Enter your", api_key_name, ": "))
+      Sys.setenv(api_key_name = new_value)
+      renviron_contents <- update_renviron_contents(renviron_contents, api_key_name, new_value)
+      message(paste(api_key_name, "saved to .Renviron. Please restart your R session."))
     } else {
-      message("To install your FRED API key for use in future sessions, run this function with `install = TRUE`.")
-      Sys.setenv(FRED_API_KEY = key)
+      message(paste(api_key_name, "already set in the environment. No action needed."))
     }
   }
 
-  bls_api_key(key = blsKey, overwrite, install)
-  fred_api_key(key = fredKey, overwrite, install)
+  # Write the updated contents back to the .Renviron file
+  writeLines(c(renviron_contents, ""), renviron_path)
 
   fredKey <<- Sys.getenv("FRED_API_KEY")
   blsKey <<- Sys.getenv("BLS_API_KEY")
 
-
-
+  message("API keys are now available in the global environment as 'fredKey' and 'blsKey'.")
 }

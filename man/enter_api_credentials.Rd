@@ -4,12 +4,7 @@
 \alias{enter_api_credentials}
 \title{A script to enter API keys for the JECTools package}
 \usage{
-enter_api_credentials(
-  fredKey = Sys.getenv("FRED_API_KEY"),
-  blsKey = Sys.getenv("BLS_API_KEY"),
-  overwrite = FALSE,
-  install = FALSE
-)
+enter_api_credentials(fred_api_key = NULL, bls_api_key = NULL)
 }
 \arguments{
 \item{fred_key}{An API key from FRED}
