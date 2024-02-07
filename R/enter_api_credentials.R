@@ -51,7 +51,7 @@ enter_api_credentials <- function(fredKey = Sys.getenv("FRED_API_KEY"),
   }
   }
 
-  fred_api_key <- function(key = blsKey, overwrite, install) {
+  fred_api_key <- function(key = fredKey, overwrite, install) {
 
     if (install) {
       home <- Sys.getenv("HOME")
