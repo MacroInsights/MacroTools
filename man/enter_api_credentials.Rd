@@ -5,8 +5,10 @@
 \title{A script to enter API keys for the JECTools package}
 \usage{
 enter_api_credentials(
-  fred_key = readline(prompt = "Enter FRED API key:"),
-  bls_key = readline(prompt = "Enter BLS API key:")
+  fredKey = Sys.getenv("FRED_API_KEY"),
+  blsKey = Sys.getenv("BLS_API_KEY"),
+  overwrite = FALSE,
+  install = FALSE
 )
 }
 \arguments{
