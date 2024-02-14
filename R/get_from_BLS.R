@@ -1,4 +1,4 @@
-#' Downloads unemployment data from Fred
+#' Downloads specific series from BLS as either long format, wide format, or individual series.
 #'
 #' @param end_year Last year of data to get. Default is today's year
 #' @param start_year First year of data to get. Default is five years from 'end_year'

@@ -36,7 +36,7 @@ get_inflation(
 )
 }
 \arguments{
-\item{years}{Number of years of data to get}
+\item{years}{Number of years of data to get. This needs to change.}
 
 \item{monthly}{Whether to calculate MoM \% Change}
 

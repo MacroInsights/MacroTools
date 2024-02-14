@@ -23,7 +23,7 @@
 #'   "CUSR0000SAS4",	  'Transportation',
 #'   "CUSR0000SAM2",	  'Medical care services')
 #'
-#' @param years Number of years of data to get
+#' @param years Number of years of data to get. This needs to change.
 #' @param monthly Whether to calculate MoM % Change
 #' @param main_variables Whether to include only CPI, Core CPI, PCE, Core PCE, andProducer Price Index
 #'

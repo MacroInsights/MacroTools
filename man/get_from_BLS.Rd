@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_from_BLS.R
 \name{get_from_BLS}
 \alias{get_from_BLS}
-\title{Downloads unemployment data from Fred}
+\title{Downloads specific series from BLS as either long format, wide format, or individual series.}
 \usage{
 get_from_BLS(
   start_year = NULL,
@@ -27,7 +27,7 @@ get_from_BLS(
 An xts object
 }
 \description{
-Downloads unemployment data from Fred
+Downloads specific series from BLS as either long format, wide format, or individual series.
 }
 \examples{
 get_from_BLS(seriesIDs = "LNS14000000")

@@ -4,10 +4,18 @@
 \alias{get_GDP}
 \title{Downloads Real GDP from Fred for the US, all US States, or a selection of states.}
 \usage{
-get_GDP(years = 5, geography = "National", latest = FALSE, fred_key = fredKey)
+get_GDP(
+  start_year = NULL,
+  end_year = NULL,
+  geography = "National",
+  latest = FALSE,
+  fred_key = fredKey
+)
 }
 \arguments{
-\item{years}{Number of years of data to get}
+\item{start_year}{First year of data to get. Default is five years from 'end_year'}
+
+\item{end_year}{Last year of data to get. Default is today's year}
 
 \item{geography}{'National' (default), 'State', or list of states like c("DC","NM")}
 
@@ -23,5 +31,6 @@ Downloads Real GDP from Fred for the US, all US States, or a selection of states
 }
 \examples{
 real_GDP <- get_GDP()
+real_GDP_from_2020 <- get_GDP(start_year = 2020)
 states_real_GDP <- get_GDP(geography = c("DC","NC"), latest = TRUE)
 }
