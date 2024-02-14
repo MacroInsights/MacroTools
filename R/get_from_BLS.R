@@ -1,19 +1,23 @@
 #' Downloads unemployment data from Fred
 #'
-#' @param years Number of years of data to get
-#' @param geography Whether to include all states
-#' @param demography Wheter to include race/ethnicity
-#' @param latest Gets the latest complete unemployment figures
-#' @param fred_key A FRED API
-#' @param BLS_key A BLS KEy
+#' @param end_year Last year of data to get. Default is today's year
+#' @param start_year First year of data to get. Default is five years from 'end_year'
+#' @param seriesIDs Vector of codes from the BLS to get.
+#' @param format Output format to get: Default is 'long', but it can return 'wide' and 'individual' for individual series
+#' @param BLS_key A BLS Key
 #'
-#' @return An xts object with unemployment data
+#' @return An xts object
 #' @export
 #'
 #' @examples
-#' unemployment <- get_unemployment()
+#' get_from_BLS(seriesIDs = "LNS14000000")
+#' get_from_BLS(seriesIDs = c("LNS14000000","CES0000000001"))
+#' get_from_BLS(end_year = 2019, start_year = 2012, seriesIDs = "LNS14000000")
+#' get_from_BLS(seriesIDs = c("LNS14000000","CES0000000001"), format = 'individual')
+#' get_from_BLS(seriesIDs = c("LNS14000000","BDU0000000000000000110001LQ5"), format = 'wide')
 get_from_BLS <- memoise::memoise(function(
-    years = 5,
+    start_year = NULL,
+    end_year = NULL,
     seriesIDs,
     format = 'long',
     BLS_key = blsKey)
@@ -21,8 +25,33 @@ get_from_BLS <- memoise::memoise(function(
 
   api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
 
-  start_year = lubridate::year(Sys.Date()) - years
-  end_year = lubridate::year(Sys.Date())
+  #######################################################################
+  #                          LOGIC FOR DATES
+  # Current year
+  currentYear <- as.numeric(format(Sys.Date(), "%Y"))
+
+  # If end_year is NULL, set it to the current year
+  if (is.null(end_year)) {
+    end_year <- currentYear
+  } else {
+    end_year <- as.numeric(end_year) # Ensure end_year is numeric
+  }
+
+  # If start_year is NULL, set it to five years less than end_year
+  if (is.null(start_year)) {
+    start_year <- end_year - 5
+  } else {
+    start_year <- as.numeric(start_year) }
+
+
+  # Ensure start_year is less than end_year
+  if (start_year >= end_year) {
+    stop("start_year must be less than end_year")
+  }
+
+
+  # start_year = lubridate::year(Sys.Date()) - years
+  # end_year = lubridate::year(Sys.Date())
 
   # Specifying the payload
   code_vector <- as.character(seriesIDs)
@@ -60,9 +89,7 @@ get_from_BLS <- memoise::memoise(function(
       mutate(date = ym(paste(df_raw$date,
                              df_raw$period))) %>%
       select(date, value, seriesID) %>%
-      left_join(demo_variables) %>%
-      select(-seriesID) %>%
-      pivot_wider(names_from = name, values_from = value)
+      pivot_wider(names_from = seriesID, values_from = value)
     return(df_output)
   }
 

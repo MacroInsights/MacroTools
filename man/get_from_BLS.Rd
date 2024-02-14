@@ -4,27 +4,35 @@
 \alias{get_from_BLS}
 \title{Downloads unemployment data from Fred}
 \usage{
-get_from_BLS(years = 5, seriesIDs, format = "long", BLS_key = blsKey)
+get_from_BLS(
+  start_year = NULL,
+  end_year = NULL,
+  seriesIDs,
+  format = "long",
+  BLS_key = blsKey
+)
 }
 \arguments{
-\item{years}{Number of years of data to get}
+\item{start_year}{First year of data to get. Default is five years from 'end_year'}
 
-\item{BLS_key}{A BLS KEy}
+\item{end_year}{Last year of data to get. Default is today's year}
 
-\item{geography}{Whether to include all states}
+\item{seriesIDs}{Vector of codes from the BLS to get.}
 
-\item{demography}{Wheter to include race/ethnicity}
+\item{format}{Output format to get: Default is 'long', but it can return 'wide' and 'individual' for individual series}
 
-\item{latest}{Gets the latest complete unemployment figures}
-
-\item{fred_key}{A FRED API}
+\item{BLS_key}{A BLS Key}
 }
 \value{
-An xts object with unemployment data
+An xts object
 }
 \description{
 Downloads unemployment data from Fred
 }
 \examples{
-unemployment <- get_unemployment()
+get_from_BLS(seriesIDs = "LNS14000000")
+get_from_BLS(seriesIDs = c("LNS14000000","CES0000000001"))
+get_from_BLS(end_year = 2019, start_year = 2012, seriesIDs = "LNS14000000")
+get_from_BLS(seriesIDs = c("LNS14000000","CES0000000001"), format = 'individual')
+get_from_BLS(seriesIDs = c("LNS14000000","BDU0000000000000000110001LQ5"), format = 'wide')
 }

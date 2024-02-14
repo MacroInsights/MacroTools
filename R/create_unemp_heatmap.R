@@ -50,11 +50,11 @@ create_unemp_heatmap <- function(
   dplyr::bind_cols(table_data, table_data_chg) %>%
     dplyr::rename_with(~stringr::str_replace(.,"^20","'")) |>
     gt::gt(rowname_col = "Month") |>
-    gt::cols_hide(c(Chg_2014:Chg_2023)) %>%
+    gt::cols_hide(c(Chg_2015:Chg_2024)) %>%
     gt::sub_missing(missing_text = "") |>
-    gt::data_color(columns =  c(Chg_2014:Chg_2023), target_columns = c(2:11),
+    gt::data_color(columns =  c(12:21), target_columns = c(2:11),
                palette = c(color_down,color_up),
-               na_color = "black") |>
+               na_color = "black")
     gt::tab_options(table.background.color = "black",
                 table.border.top.width=0,
                 column_labels.padding = gt::px(35),
