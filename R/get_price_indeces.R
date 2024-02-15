@@ -99,7 +99,7 @@ get_price_indeces <- memoise::memoise(function(
   # Connect to Fred and Download Data ####
   # Paparameters of the request
   params <- list(
-    series_id = variables,
+    series_id = variables$code,
     observation_start = rep(as.Date(paste0(start_year,"-01","-01")),
                             num_series),
     observation_end = rep(as.Date(paste0(end_year,"-12","-31")), num_series))
