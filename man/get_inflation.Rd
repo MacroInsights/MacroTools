@@ -28,7 +28,8 @@
 "CUSR0000SAM2",	  'Medical care services')}
 \usage{
 get_inflation(
-  years = 5,
+  start_year = NULL,
+  end_year = NULL,
   monthly = FALSE,
   main_variables = FALSE,
   fred_key = fredKey,
@@ -36,11 +37,11 @@ get_inflation(
 )
 }
 \arguments{
-\item{years}{Number of years of data to get. This needs to change.}
-
 \item{monthly}{Whether to calculate MoM \% Change}
 
 \item{main_variables}{Whether to include only CPI, Core CPI, PCE, Core PCE, andProducer Price Index}
+
+\item{years}{Number of years of data to get. This needs to change.}
 }
 \value{
 An xts object with inflation data

@@ -33,10 +33,38 @@
 #' @examples
 #' price_indeces <- get_price_indeces()
 get_price_indeces_nsa <- memoise::memoise(function(
-    years = 5,
+    start_year = NULL,
+    end_year = NULL,
     fred_key = fredKey,
     BLS_key = blsKey)
   {
+
+  #######################################################################
+  #                          LOGIC FOR DATES
+  # Current year
+  currentYear <- as.numeric(format(Sys.Date(), "%Y"))
+
+  # If end_year is NULL, set it to the current year
+  if (is.null(end_year)) {
+    end_year <- currentYear
+  } else {
+    end_year <- as.numeric(end_year) # Ensure end_year is numeric
+  }
+
+  # If start_year is NULL, set it to five years less than end_year
+  if (is.null(start_year)) {
+    start_year <- end_year - 5
+  } else {
+    start_year <- as.numeric(start_year) }
+
+
+  # Ensure start_year is less than end_year
+  if (start_year >= end_year) {
+    stop("start_year must be less than end_year")
+  }
+  #######################################################################
+
+
 
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
@@ -73,14 +101,10 @@ get_price_indeces_nsa <- memoise::memoise(function(
   # Connect to Fred and Download Data ####
   # Paparameters of the request
   params <- list(
-    series_id = variables$code,
-    observation_start = rep(as.Date(lubridate::floor_date(Sys.Date(),
-                                    unit = "weeks") +
-                                    lubridate::days(7))-lubridate::years(years),
-                                    num_series),
-    observation_end = rep(as.Date(lubridate::floor_date(Sys.Date(),
-                                  unit = "weeks") +
-                                  lubridate::days(7)), num_series))
+    series_id = variables,
+    observation_start = rep(as.Date(paste0(start_year,"-01","-01")),
+                            num_series),
+    observation_end = rep(as.Date(paste0(end_year,"-12","-31")), num_series))
 
 
   raw_data_fred <- purrr::pmap_dfr(

@@ -34,19 +34,45 @@
 #' inflation <- get_inflation()
 #' inflationMoM <- get_inflation(monthly = TRUE, main_variables = TRUE)
 get_inflation <- memoise::memoise(function(
-    years = 5,
+    start_year = NULL,
+    end_year = NULL,
     monthly = FALSE,
     main_variables = FALSE,
     fred_key = fredKey,
     BLS_key = blsKey)
   {
 
+  #######################################################################
+  #                          LOGIC FOR DATES
+  # Current year
+  currentYear <- as.numeric(format(Sys.Date(), "%Y"))
+
+  # If end_year is NULL, set it to the current year
+  if (is.null(end_year)) {
+    end_year <- currentYear
+  } else {
+    end_year <- as.numeric(end_year) # Ensure end_year is numeric
+  }
+
+  # If start_year is NULL, set it to five years less than end_year
+  if (is.null(start_year)) {
+    start_year <- end_year - 5
+  } else {
+    start_year <- as.numeric(start_year) }
+
+
+  # Ensure start_year is less than end_year
+  if (start_year >= end_year) {
+    stop("start_year must be less than end_year")
+  }
+  #######################################################################
+
   # Setting FRED API Key
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
   pricesM <- JECTools::get_price_indeces(years + 1)
-  pricesY <- JECTools::get_price_indeces_nsa(years + 1)
+  pricesY <- JECTools::get_price_indeces_nsa(start_year = start_year - 1, end_year = end_year)
 
   if(monthly) {
     inflation <- (pricesM - dplyr::lag(pricesM, 1)) / dplyr::lag(pricesM, 1) * 100
