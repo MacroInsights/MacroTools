@@ -27,14 +27,19 @@
 "CUSR0000SAS4",	  'Transportation',
 "CUSR0000SAM2",	  'Medical care services')}
 \usage{
-get_price_indeces(years = 5, fred_key = fredKey, BLS_key = blsKey)
+get_price_indeces(
+  start_year = NULL,
+  end_year = NULL,
+  fred_key = fredKey,
+  BLS_key = blsKey
+)
 }
 \arguments{
-\item{years}{Number of years of data to get}
-
 \item{fred_key}{A fred API key}
 
 \item{BLS_key}{A bls API Key}
+
+\item{years}{Number of years of data to get}
 }
 \value{
 An xts object with unemployment data
