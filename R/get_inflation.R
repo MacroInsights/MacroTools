@@ -71,7 +71,7 @@ get_inflation <- memoise::memoise(function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  pricesM <- JECTools::get_price_indeces(years + 1)
+  pricesM <- JECTools::get_price_indeces(start_year = start_year - 1, end_year = end_year)
   pricesY <- JECTools::get_price_indeces_nsa(start_year = start_year - 1, end_year = end_year)
 
   if(monthly) {
