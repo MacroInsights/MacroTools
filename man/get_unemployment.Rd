@@ -5,7 +5,8 @@
 \title{Downloads unemployment data from Fred}
 \usage{
 get_unemployment(
-  years = 5,
+  start_year = NULL,
+  end_year = NULL,
   geography = "National",
   demography = FALSE,
   latest = FALSE,
@@ -14,8 +15,6 @@ get_unemployment(
 )
 }
 \arguments{
-\item{years}{Number of years of data to get}
-
 \item{geography}{Whether to include all states}
 
 \item{demography}{Wheter to include race/ethnicity}
@@ -25,6 +24,8 @@ get_unemployment(
 \item{fred_key}{A FRED API}
 
 \item{BLS_key}{A BLS KEy}
+
+\item{years}{Number of years of data to get}
 }
 \value{
 An xts object with unemployment data
