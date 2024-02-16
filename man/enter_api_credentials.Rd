@@ -2,7 +2,10 @@
 % Please edit documentation in R/enter_api_credentials.R
 \name{enter_api_credentials}
 \alias{enter_api_credentials}
-\title{A script to enter API keys for the JECTools package}
+\title{A script to load or save API keys for the JECTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
+#############################################################
+NOTE: After saving an API Key, YOU MUST RESTART THE R SESSION
+#############################################################}
 \usage{
 enter_api_credentials(fred_api_key = NULL, bls_api_key = NULL)
 }
@@ -15,8 +18,13 @@ enter_api_credentials(fred_api_key = NULL, bls_api_key = NULL)
 It creates the API keys in the global environment. Maybe not the best practice
 }
 \description{
-A script to enter API keys for the JECTools package
+A script to load or save API keys for the JECTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
+#############################################################
+NOTE: After saving an API Key, YOU MUST RESTART THE R SESSION
+#############################################################
 }
 \examples{
-enter_api_credentials()
+enter_api_credentials()  # Loads already saved API Keys into the environment
+enter_api_credentials(fred_api_key = "FRED_API_KEY_GOES_HERE")  # Saves or updates the FRED KEY
+enter_api_credentials(bls_api_key = "BLS_API_KEY_GOES_HERE")  # Saves or updates the BLS KEY
 }

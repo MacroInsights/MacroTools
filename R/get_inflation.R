@@ -1,9 +1,10 @@
-#' Computes inflation data. The default yields five years of monthly YoY inflation of:
+#' Computes inflation data. It uses unseasonably adjusted data for yearly computed inflation and seasonally adjusted data for monthly inflation. The main inflation variables are:
 #'   "CPIAUCSL",	      'CPI',
 #'   "CPILFESL",	      'Core CPI',
 #'   "PCEPI",	          'PCE',
 #'   "PCEPILFE",	      'Core PCE',
-#'   "PPIFIS",	        'Producer Price Index',
+#'   "PPIFIS",	        'Producer Price Index'
+#' The additional inflation variables are:
 #'   "CPIUFDSL",	      'Food',
 #'   "CUSR0000SAF11",	  'Food at home',
 #'   "CUSR0000SEFV",	  'Food away',
@@ -23,21 +24,23 @@
 #'   "CUSR0000SAS4",	  'Transportation',
 #'   "CUSR0000SAM2",	  'Medical care services')
 #'
-#' @param years Number of years of data to get. This needs to change.
-#' @param monthly Whether to calculate MoM % Change
-#' @param main_variables Whether to include only CPI, Core CPI, PCE, Core PCE, andProducer Price Index
+#' @param end_year Last year of data to get. Default is today's year
+#' @param start_year First year of data to get. Default is five years from 'end_year'
+#' @param monthly Whether to calculate MoM % Change. The default is FALSE
+#' @param main_variables Whether to include only CPI, Core CPI, PCE, Core PCE, and Producer Price Index. The default is TRUE
 #'
 #' @return An xts object with inflation data
 #' @export
 #'
 #' @examples
 #' inflation <- get_inflation()
-#' inflationMoM <- get_inflation(monthly = TRUE, main_variables = TRUE)
+#' inflation_since_2020 <- get_inflation(start_year = 2020)
+#' inflationMoM <- get_inflation(monthly = TRUE, main_variables = FALSE)
 get_inflation <- memoise::memoise(function(
     start_year = NULL,
     end_year = NULL,
     monthly = FALSE,
-    main_variables = FALSE,
+    main_variables = TRUE,
     fred_key = fredKey,
     BLS_key = blsKey)
   {

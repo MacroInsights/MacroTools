@@ -1,6 +1,7 @@
-#' Downloads Real GDP from Fred for the US, all US States, or a selection of states.
+#' Downloads Nominal GDP from Fred for the US, all US States, or a selection of states.
 #'
-#' @param years Number of years of data to get
+#' @param end_year Last year of data to get. Default is today's year
+#' @param start_year First year of data to get. Default is five years from 'end_year'
 #' @param geography 'National' (default), 'State', or list of states like c("DC","NM")
 #' @param latest Gets the latest complete GDP figures
 #' @param fred_key A FRED API
@@ -10,6 +11,7 @@
 #'
 #' @examples
 #' nominal_GDP <- get_nominal_GDP()
+#' nominal_GDP_from_2020 <- get_nominal_GDP(start_year = 2020)
 #' states_nominal_GDP <- get_nominal_GDP(geography = c("DC","NC"), latest = TRUE)
 get_nominal_GDP <- memoise::memoise(function(
     start_year = NULL,

@@ -35,11 +35,13 @@ get_price_indeces_nsa(
 )
 }
 \arguments{
+\item{start_year}{First year of data to get. Default is five years from 'end_year'}
+
+\item{end_year}{Last year of data to get. Default is today's year}
+
 \item{fred_key}{A fred API key}
 
 \item{BLS_key}{A bls API Key}
-
-\item{years}{Number of years of data to get}
 }
 \value{
 An xts object with unemployment data
@@ -71,5 +73,5 @@ Downloads the following not-seasonally adjusted price indexes data from Fred and
 "CUSR0000SAM2",	  'Medical care services')
 }
 \examples{
-price_indeces <- get_price_indeces()
+price_indeces <- get_price_indeces_nsa()
 }

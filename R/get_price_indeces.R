@@ -1,4 +1,4 @@
-#' Downloads the following price indexes data from Fred and the BLS:
+#' Downloads the following seasonally adjusted price indexes data from Fred and the BLS:
 #'   "CPIAUCSL",	      'CPI',
 #'   "CPILFESL",	      'Core CPI',
 #'   "PCEPI",	          'PCE',

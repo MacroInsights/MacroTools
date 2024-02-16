@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_price_indeces.R
 \name{get_price_indeces}
 \alias{get_price_indeces}
-\title{Downloads the following price indexes data from Fred and the BLS:
+\title{Downloads the following seasonally adjusted price indexes data from Fred and the BLS:
 "CPIAUCSL",	      'CPI',
 "CPILFESL",	      'Core CPI',
 "PCEPI",	          'PCE',
@@ -45,7 +45,7 @@ get_price_indeces(
 An xts object with unemployment data
 }
 \description{
-Downloads the following price indexes data from Fred and the BLS:
+Downloads the following seasonally adjusted price indexes data from Fred and the BLS:
 "CPIAUCSL",	      'CPI',
 "CPILFESL",	      'Core CPI',
 "PCEPI",	          'PCE',

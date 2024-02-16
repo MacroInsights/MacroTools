@@ -25,13 +25,14 @@
 #'
 #' @param fred_key A fred API key
 #' @param BLS_key A bls API Key
-#' @param years Number of years of data to get
+#' @param end_year Last year of data to get. Default is today's year
+#' @param start_year First year of data to get. Default is five years from 'end_year'
 #'
 #' @return An xts object with unemployment data
 #' @export
 #'
 #' @examples
-#' price_indeces <- get_price_indeces()
+#' price_indeces <- get_price_indeces_nsa()
 get_price_indeces_nsa <- memoise::memoise(function(
     start_year = NULL,
     end_year = NULL,

@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' data_tsibble <- transform_to_tsibble()
+#' data_tsibble <- get_unemployment() |> transform_to_tsibble()
 transform_to_tsibble <- function(data = xts_obj) {
   # Convert xts to tibble
   tibble_obj <- tidyr::tibble(date = zoo::index(data),

@@ -1,8 +1,9 @@
-#' Downloads unemployment data from Fred
+#' Downloads monthly unemployment data from Fred and the BLS
 #'
-#' @param years Number of years of data to get
-#' @param geography Whether to include all states
-#' @param demography Wheter to include race/ethnicity
+#' @param end_year Last year of data to get. Default is today's year
+#' @param start_year First year of data to get. Default is five years from 'end_year'
+#' @param geography 'National' (default), 'State', or list of states like c("DC","NM")
+#' @param demography Include national levels of unemployment by gender/race/ethnicity
 #' @param latest Gets the latest complete unemployment figures
 #' @param fred_key A FRED API
 #' @param BLS_key A BLS KEy
@@ -12,6 +13,9 @@
 #'
 #' @examples
 #' unemployment <- get_unemployment()
+#' unemployment_state_demography <- get_unemployment(geography = c("DC","NC"), demography = TRUE)
+#' unemployment_latest <- get_unemployment(latest = TRUE)
+#' unemployment_2020_2021 <- get_unemployment(start_year = 2020, end_year = 2021)
 get_unemployment <- memoise::memoise(function(
     start_year = NULL,
     end_year = NULL,

@@ -16,5 +16,5 @@ A tsibble
 It transforms an xts object to a tsibble
 }
 \examples{
-data_tsibble <- transform_to_tsibble()
+data_tsibble <- get_unemployment() |> transform_to_tsibble()
 }

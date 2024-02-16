@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_unemployment.R
 \name{get_unemployment}
 \alias{get_unemployment}
-\title{Downloads unemployment data from Fred}
+\title{Downloads monthly unemployment data from Fred and the BLS}
 \usage{
 get_unemployment(
   start_year = NULL,
@@ -15,24 +15,29 @@ get_unemployment(
 )
 }
 \arguments{
-\item{geography}{Whether to include all states}
+\item{start_year}{First year of data to get. Default is five years from 'end_year'}
 
-\item{demography}{Wheter to include race/ethnicity}
+\item{end_year}{Last year of data to get. Default is today's year}
+
+\item{geography}{'National' (default), 'State', or list of states like c("DC","NM")}
+
+\item{demography}{Include national levels of unemployment by gender/race/ethnicity}
 
 \item{latest}{Gets the latest complete unemployment figures}
 
 \item{fred_key}{A FRED API}
 
 \item{BLS_key}{A BLS KEy}
-
-\item{years}{Number of years of data to get}
 }
 \value{
 An xts object with unemployment data
 }
 \description{
-Downloads unemployment data from Fred
+Downloads monthly unemployment data from Fred and the BLS
 }
 \examples{
 unemployment <- get_unemployment()
+unemployment_state_demography <- get_unemployment(geography = c("DC","NC"), demography = TRUE)
+unemployment_latest <- get_unemployment(latest = TRUE)
+unemployment_2020_2021 <- get_unemployment(start_year = 2020, end_year = 2021)
 }

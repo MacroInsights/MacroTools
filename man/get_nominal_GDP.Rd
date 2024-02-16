@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nominal_GDP.R
 \name{get_nominal_GDP}
 \alias{get_nominal_GDP}
-\title{Downloads Real GDP from Fred for the US, all US States, or a selection of states.}
+\title{Downloads Nominal GDP from Fred for the US, all US States, or a selection of states.}
 \usage{
 get_nominal_GDP(
   start_year = NULL,
@@ -13,21 +13,24 @@ get_nominal_GDP(
 )
 }
 \arguments{
+\item{start_year}{First year of data to get. Default is five years from 'end_year'}
+
+\item{end_year}{Last year of data to get. Default is today's year}
+
 \item{geography}{'National' (default), 'State', or list of states like c("DC","NM")}
 
 \item{latest}{Gets the latest complete GDP figures}
 
 \item{fred_key}{A FRED API}
-
-\item{years}{Number of years of data to get}
 }
 \value{
 An xts object with GDP data
 }
 \description{
-Downloads Real GDP from Fred for the US, all US States, or a selection of states.
+Downloads Nominal GDP from Fred for the US, all US States, or a selection of states.
 }
 \examples{
 nominal_GDP <- get_nominal_GDP()
+nominal_GDP_from_2020 <- get_nominal_GDP(start_year = 2020)
 states_nominal_GDP <- get_nominal_GDP(geography = c("DC","NC"), latest = TRUE)
 }

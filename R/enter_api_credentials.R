@@ -1,4 +1,7 @@
-#' A script to enter API keys for the JECTools package
+#' A script to load or save API keys for the JECTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
+#' #############################################################
+#' NOTE: After saving an API Key, YOU MUST RESTART THE R SESSION
+#' #############################################################
 #'
 #' @param fred_key An API key from FRED
 #' @param bls_key  An API key from BLS
@@ -7,7 +10,9 @@
 #' @export
 #'
 #' @examples
-#' enter_api_credentials()
+#' enter_api_credentials()  # Loads already saved API Keys into the environment
+#' enter_api_credentials(fred_api_key = "FRED_API_KEY_GOES_HERE")  # Saves or updates the FRED KEY
+#' enter_api_credentials(bls_api_key = "BLS_API_KEY_GOES_HERE")  # Saves or updates the BLS KEY
 enter_api_credentials <- function(fred_api_key = NULL, bls_api_key = NULL) {
 
   update_renviron_contents <- function(contents, key, value) {

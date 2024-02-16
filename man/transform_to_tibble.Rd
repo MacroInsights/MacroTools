@@ -16,5 +16,5 @@ A tibble
 It transforms an xts object to a tibble
 }
 \examples{
-data_tsibble <- transform_to_tsibble()
+data_tibble <- get_unemployment() |> transform_to_tibble()
 }
