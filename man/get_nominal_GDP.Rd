@@ -5,20 +5,21 @@
 \title{Downloads Real GDP from Fred for the US, all US States, or a selection of states.}
 \usage{
 get_nominal_GDP(
-  years = 5,
+  start_year = NULL,
+  end_year = NULL,
   geography = "National",
   latest = FALSE,
   fred_key = fredKey
 )
 }
 \arguments{
-\item{years}{Number of years of data to get}
-
 \item{geography}{'National' (default), 'State', or list of states like c("DC","NM")}
 
 \item{latest}{Gets the latest complete GDP figures}
 
 \item{fred_key}{A FRED API}
+
+\item{years}{Number of years of data to get}
 }
 \value{
 An xts object with GDP data
