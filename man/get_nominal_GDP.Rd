@@ -27,7 +27,7 @@ get_nominal_GDP(
 An xts object with GDP data
 }
 \description{
-Downloads Nominal GDP from Fred for the US, all US States, or a selection of states.
+All figures are in millions
 }
 \examples{
 nominal_GDP <- get_nominal_GDP()
