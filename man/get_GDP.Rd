@@ -27,7 +27,7 @@ get_GDP(
 An xts object with GDP data
 }
 \description{
-Downloads Real GDP from Fred for the US, all US States, or a selection of states.
+All figures are in millions
 }
 \examples{
 real_GDP <- get_GDP()

@@ -1,5 +1,7 @@
 #' Downloads Real GDP from Fred for the US, all US States, or a selection of states.
 #'
+#' All figures are in millions
+#'
 #' @param end_year Last year of data to get. Default is today's year
 #' @param start_year First year of data to get. Default is five years from 'end_year'
 #' @param geography 'National' (default), 'State', or list of states like c("DC","NM")
@@ -91,7 +93,8 @@ get_GDP <- memoise::memoise(function(
                  observation_start = ..2, observation_end = ..3)) %>%
     dplyr::select(-c(realtime_start, realtime_end)) |>
     tidyr::pivot_wider(names_from = series_id, values_from = value) |>
-    dplyr::rename(RQGDP = GDPC1)
+    dplyr::rename(RQGDP = GDPC1) %>%
+    dplyr::mutate(RQGDP = RQGDP*1000)
 
   # Subroutine to get GDP per capita
   # It uses whatever the latest population figures are for the relevant geography
