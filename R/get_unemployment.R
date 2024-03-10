@@ -55,7 +55,7 @@ get_unemployment <- memoise::memoise(function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  states <- data.frame(state = c(state.abb,"DC"))
+  states <- data.frame(state = c(state.abb,"DC","PR"))
 
   if (length(geography) == 1 && geography == "National") {
     variables <- "UNRATE"
