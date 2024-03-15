@@ -12,7 +12,10 @@
 create_unemp_heatmap <- function(
     fred_key = fredKey,
     color_up = "#d40509",
-    color_down = "#046438"
+    color_down = "#046438",
+    nas = 'black',
+    background = 'black',
+    borders = 'black'
     ) {
 
 
@@ -20,7 +23,7 @@ create_unemp_heatmap <- function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  data <- get_unemployment(10) |>
+  data <- get_unemployment(start_year = 2015) |>
     transform_to_tsibble() |>
     dplyr::mutate(Month = lubridate::month(date, label = TRUE),
            Year = lubridate::year(date)) |>
@@ -54,8 +57,8 @@ create_unemp_heatmap <- function(
     gt::sub_missing(missing_text = "") |>
     gt::data_color(columns =  c(12:21), target_columns = c(2:11),
                palette = c(color_down,color_up),
-               na_color = "black")
-    gt::tab_options(table.background.color = "black",
+               na_color = nas) |>
+    gt::tab_options(table.background.color = background,
                 table.border.top.width=0,
                 column_labels.padding = gt::px(35),
                 heading.padding = gt::px(35)) |>
@@ -64,7 +67,7 @@ create_unemp_heatmap <- function(
     gt::tab_style(
       style = gt::cell_borders(
         sides = c("right", "left"),
-        color = "black",
+        color = borders,
         weight = gt::px(5),
         style = "solid"
       ),
