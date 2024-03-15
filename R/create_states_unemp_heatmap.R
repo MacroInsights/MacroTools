@@ -16,14 +16,9 @@ create_states_unemp_heatmap <- function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  # Downloads latest US unemployment figure
-  UR <- get_unemployment(years = 1, latest = TRUE) |>
-    transform_to_tsibble() |>
-    dplyr::pull(USUR)
-
   # Downloads latest states unemployment figure. It might not be from
   # the same month.
-  states_ur <- get_unemployment(years = 1, geography = 'State', latest = TRUE) |>
+  states_ur <- get_unemployment(geography = 'State', latest = TRUE) |>
     transform_to_tsibble() |>
     dplyr::select(-USUR) |>
     tidyr::pivot_longer(-date, names_to = "series_id") |>
@@ -31,6 +26,10 @@ create_states_unemp_heatmap <- function(
             unemployment = value,
             abb = substr(series_id, start = 1, stop = 2),
             name = cdlTools::fips(abb, to = "Name"))
+
+  # Downloads latest US unemployment figure
+  UR <- get_unemployment(geography = 'State', latest = TRUE) |>
+    transform_to_tsibble() |> pull(USUR)
 
   states_data <- states_ur |>
     dplyr::mutate(estimate = unemployment - UR)
@@ -41,7 +40,7 @@ create_states_unemp_heatmap <- function(
     variables = c(households2021 = "B11012_001"),
     survey = "acs1",
     year = 2021,
-    state = c(state.abb,"DC"),
+    state = c(state.abb,"DC","PR"),
     geometry = TRUE,
     cache_table = TRUE,
     output = "wide"
