@@ -7,7 +7,10 @@
 create_unemp_heatmap(
   fred_key = fredKey,
   color_up = "#d40509",
-  color_down = "#046438"
+  color_down = "#046438",
+  nas = "black",
+  background = "black",
+  borders = "black"
 )
 }
 \arguments{
