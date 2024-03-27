@@ -32,7 +32,7 @@ create_states_clickable_map <- function(
   ')
 
   # Get latest state unemployment figures from FRED and JECTools
-  unemployment <- get_unemployment(years = 1, geography = 'State', latest = TRUE) %>%
+  unemployment <- get_unemployment(geography = 'State', latest = TRUE) %>%
     transform_to_tsibble() |>
     dplyr::as_tibble() |>
     dplyr::select(-USUR)
@@ -62,7 +62,7 @@ create_states_clickable_map <- function(
     variables = c(households2021 = "B11012_001"),
     survey = "acs1",
     year = 2021,
-    state = c(state.abb,"DC"),
+    state = c(state.abb,"DC","PR"),
     geometry = TRUE,
     cache_table = TRUE,
     output = "wide"

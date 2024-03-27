@@ -1,0 +1,52 @@
+STUSPS,names,state,name,latitude,longitude,win_url
+AL,Alabama,AL,Alabama,32.318231,-86.902298,https://www.jec.senate.gov/public/_cache/files/5a7cea77-2b02-497d-b5fe-1e90b2fe4f61/alabama-employment-situation.pdf
+AK,Alaska,AK,Alaska,63.588753,-154.493062,https://www.jec.senate.gov/public/_cache/files/d3696d45-2c38-4c64-80e6-bfa0af95ecbf/alaska-employment-situation.pdf
+AZ,Arizona,AZ,Arizona,34.048928,-111.093731,https://www.jec.senate.gov/public/_cache/files/13f3081d-9395-41d5-94a3-52fbe5a8b086/arizona-employment-situation.pdf
+AR,Arkansas,AR,Arkansas,35.20105,-91.831833,https://www.jec.senate.gov/public/_cache/files/63dacc74-9e38-4989-b675-7619da4c59ac/arkansas-employment-situation.pdf
+CA,California,CA,California,36.778261,-119.417932,https://www.jec.senate.gov/public/_cache/files/d6eab26e-353e-4d93-9fa0-2eea47589b7f/california-employment-situation.pdf
+CO,Colorado,CO,Colorado,39.550051,-105.782067,https://www.jec.senate.gov/public/_cache/files/92dd64eb-8eda-4399-9dc5-2d6d3d640011/colorado-employment-situation.pdf
+CT,Connecticut,CT,Connecticut,41.603221,-73.087749,https://www.jec.senate.gov/public/_cache/files/a5f97268-3d4e-4c85-8b99-e9ab42bb7e6c/connecticut-employment-situation.pdf
+DE,Delaware,DE,Delaware,38.910832,-75.52767,https://www.jec.senate.gov/public/_cache/files/fc134c52-934d-47c2-bca9-4986561a298e/delaware-employment-situation.pdf
+DC,District of Columbia,DC,District of Columbia,38.905985,-77.033418,https://www.jec.senate.gov/public/_cache/files/305f43a3-2e8e-45fc-a904-cca04f6b15bc/district-of-columbia-employment-situation.pdf
+FL,Florida,FL,Florida,27.664827,-81.515754,https://www.jec.senate.gov/public/_cache/files/98450d03-0f06-4e91-a809-1e6482b9db82/florida-employment-situation.pdf
+GA,Georgia,GA,Georgia,32.157435,-82.907123,https://www.jec.senate.gov/public/_cache/files/735b1d4a-5227-468c-a166-1d90c24828e1/georgia-employment-situation.pdf
+HI,Hawaii,HI,Hawaii,19.898682,-155.665857,https://www.jec.senate.gov/public/_cache/files/f02f452f-847f-45ef-b7ef-68ab80bfb682/hawaii-employment-situation.pdf
+ID,Idaho,ID,Idaho,44.068202,-114.742041,https://www.jec.senate.gov/public/_cache/files/a725bed5-64f2-4b8e-9a2d-986539868172/idaho-employment-situation.pdf
+IL,Illinois,IL,Illinois,40.633125,-89.398528,https://www.jec.senate.gov/public/_cache/files/e08ad993-b8e3-46fb-85f1-702400910b59/illinois-employment-situation.pdf
+IN,Indiana,IN,Indiana,40.551217,-85.602364,https://www.jec.senate.gov/public/_cache/files/f21fbc19-5f4a-4da3-bef8-06334a0b8367/indiana-employment-situation.pdf
+IA,Iowa,IA,Iowa,41.878003,-93.097702,https://www.jec.senate.gov/public/_cache/files/1c206be6-d748-4144-9018-0a3110679246/iowa-employment-situation.pdf
+KS,Kansas,KS,Kansas,39.011902,-98.484246,https://www.jec.senate.gov/public/_cache/files/4859130d-107d-4f8c-981c-57c46c19a782/kansas-employment-situation.pdf
+KY,Kentucky,KY,Kentucky,37.839333,-84.270018,https://jec.senate.gov/public/_cache/files/a4974db8-8ce1-4ac9-bf9b-0798aaf2b8b0/kentucky-employment-situation.pdf
+LA,Louisiana,LA,Louisiana,31.244823,-92.145024,https://www.jec.senate.gov/public/_cache/files/ae2d1efc-bf77-4340-9ad1-5c271f4b9166/louisiana-employment-situation.pdf
+ME,Maine,ME,Maine,45.253783,-69.445469,https://www.jec.senate.gov/public/_cache/files/7248bebe-bc60-40a3-bbef-9ddcd27ac6fc/maine-employment-situation.pdf
+MD,Maryland,MD,Maryland,39.045755,-76.641271,https://www.jec.senate.gov/public/_cache/files/0d593cf3-046e-4fcb-b390-b49bd2e4a2e8/maryland-employment-situation.pdf
+MA,Massachusetts,MA,Massachusetts,42.407211,-71.382437,https://www.jec.senate.gov/public/_cache/files/6eb3b639-66a4-4ac2-b8bb-0e66b83902db/massachusetts-employment-situation.pdf
+MI,Michigan,MI,Michigan,44.314844,-85.602364,https://www.jec.senate.gov/public/_cache/files/0255fcf1-c6e8-48f5-8bae-c0cee7decfad/michigan-employment-situation.pdf
+MN,Minnesota,MN,Minnesota,46.729553,-94.6859,https://www.jec.senate.gov/public/_cache/files/57aa8a58-39c9-452d-832a-f18be4fcc7a1/minnesota-employment-situation.pdf
+MS,Mississippi,MS,Mississippi,32.354668,-89.398528,https://www.jec.senate.gov/public/_cache/files/64114dba-09df-42cd-a94e-db8b81599ddb/mississippi-employment-situation.pdf
+MO,Missouri,MO,Missouri,37.964253,-91.831833,https://www.jec.senate.gov/public/_cache/files/12a58d97-2986-4fd8-b888-5a8857e907e1/missouri-employment-situation.pdf
+MT,Montana,MT,Montana,46.879682,-110.362566,https://www.jec.senate.gov/public/_cache/files/cee39e6b-f5fa-4b2d-a826-83f268fa5577/montana-employment-situation.pdf
+NE,Nebraska,NE,Nebraska,41.492537,-99.901813,https://www.jec.senate.gov/public/_cache/files/6175c2ec-da61-43c2-94c9-3b99dbdbcc3b/nebraska-employment-situation.pdf
+NV,Nevada,NV,Nevada,38.80261,-116.419389,https://www.jec.senate.gov/public/_cache/files/52d5dd4f-d23f-4d79-8429-46a10f03bae5/nevada-employment-situation.pdf
+NH,New Hampshire,NH,New Hampshire,43.193852,-71.572395,https://www.jec.senate.gov/public/_cache/files/3850104e-2215-4c06-96f5-47f28ab39fad/new-hampshire-employment-situation.pdf
+NJ,New Jersey,NJ,New Jersey,40.058324,-74.405661,https://www.jec.senate.gov/public/_cache/files/f6831235-9fdc-4666-80e2-d568c6446eb7/new-jersey-employment-situation.pdf
+NM,New Mexico,NM,New Mexico,34.97273,-105.032363,https://www.jec.senate.gov/public/_cache/files/61891bbe-9ef0-4c95-b72a-8d56a22f6685/new-mexico-employment-situation.pdf
+NY,New York,NY,New York,43.299428,-74.217933,https://www.jec.senate.gov/public/_cache/files/a3fa857a-4acd-4884-8b68-b98ec0e17157/new-york-employment-situation.pdf
+NC,North Carolina,NC,North Carolina,35.759573,-79.0193,https://www.jec.senate.gov/public/_cache/files/18b41a70-a606-4958-aaef-5ad34a5d849e/north-carolina-employment-situation.pdf
+ND,North Dakota,ND,North Dakota,47.551493,-101.002012,https://www.jec.senate.gov/public/_cache/files/39916396-6306-48e2-9107-7ee742edd570/north-dakota-employment-situation.pdf
+OH,Ohio,OH,Ohio,40.417287,-82.907123,https://www.jec.senate.gov/public/_cache/files/a68e9af1-9acc-44d0-8855-5c55cfcf33aa/ohio-employment-situation.pdf
+OK,Oklahoma,OK,Oklahoma,35.007752,-97.092877,https://www.jec.senate.gov/public/_cache/files/587eee2a-3c58-4533-a67f-e06ed8678e15/oklahoma-employment-situation.pdf
+OR,Oregon,OR,Oregon,43.804133,-120.554201,https://www.jec.senate.gov/public/_cache/files/a36027a1-3fd4-41bd-8513-78a46faf61dd/oregon-employment-situation.pdf
+PA,Pennsylvania,PA,Pennsylvania,41.203322,-77.194525,https://www.jec.senate.gov/public/_cache/files/d2f2c26a-c740-4e92-9187-c550b3acefa7/pennsylvania-employment-situation.pdf
+RI,Rhode Island,RI,Rhode Island,41.580095,-71.477429,https://www.jec.senate.gov/public/_cache/files/6fe03d21-ae1d-4332-bd7e-3dfa89055a5b/rhode-island-employment-situation.pdf
+SC,South Carolina,SC,South Carolina,33.836081,-81.163725,https://www.jec.senate.gov/public/_cache/files/c62db036-856a-418f-bf5b-d68960139a98/south-carolina-employment-situation.pdf
+SD,South Dakota,SD,South Dakota,43.969515,-99.901813,https://www.jec.senate.gov/public/_cache/files/ab7adc70-9bd3-4bc0-b549-6d2d77a3a4b2/south-dakota-employment-situation.pdf
+TN,Tennessee,TN,Tennessee,35.517491,-86.580447,https://www.jec.senate.gov/public/_cache/files/1045e374-7ccf-4d75-8671-c9b85b4771f4/tennessee-employment-situation.pdf
+TX,Texas,TX,Texas,31.968599,-99.901813,https://www.jec.senate.gov/public/_cache/files/e6c95653-0992-44e9-82b0-3a2c7f889fb6/texas-employment-situation.pdf
+UT,Utah,UT,Utah,39.32098,-111.093731,https://www.jec.senate.gov/public/_cache/files/e2607e0e-2057-4ffc-9f45-2dfae78c257d/utah-employment-situation.pdf
+VT,Vermont,VT,Vermont,44.558803,-72.577841,https://www.jec.senate.gov/public/_cache/files/f576f0af-5d1a-4cdf-b638-65b1f572c329/vermont-employment-situation.pdf
+VA,Virginia,VA,Virginia,37.431573,-78.656894,https://www.jec.senate.gov/public/_cache/files/dbd013dd-e2a6-43ff-9b5b-eb204b8ca3b1/virginia-employment-situation.pdf
+WA,Washington,WA,Washington,47.751074,-120.740139,https://www.jec.senate.gov/public/_cache/files/6a0597e0-c2f3-4d01-a5ad-f7deb23fb4c1/washington-employment-situation.pdf
+WV,West Virginia,WV,West Virginia,38.597626,-80.454903,https://www.jec.senate.gov/public/_cache/files/89ea9047-b060-4eff-a0f7-2678abf9ab97/west-virginia-employment-situation.pdf
+WI,Wisconsin,WI,Wisconsin,43.78444,-88.787868,https://www.jec.senate.gov/public/_cache/files/f05a233d-23c7-4954-bc77-62464b3f3684/wisconsin-employment-situation.pdf
+WY,Wyoming,WY,Wyoming,43.075968,-107.290284,https://www.jec.senate.gov/public/_cache/files/222dceb3-5b2f-4108-ac47-a9bf17ce87db/wyoming-employment-situation.pdf
