@@ -24,7 +24,7 @@ get_GDP(
 \item{fred_key}{A FRED API}
 }
 \value{
-An xts object with GDP data
+An XTS object with GDP data
 }
 \description{
 All figures are in millions
