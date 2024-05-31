@@ -8,7 +8,7 @@
 #' @param latest Gets the latest complete GDP figures
 #' @param fred_key A FRED API
 #'
-#' @return An xts object with GDP data
+#' @return An XTS object with GDP data
 #' @export
 #'
 #' @examples
