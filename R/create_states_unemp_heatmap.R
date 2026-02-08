@@ -1,3 +1,11 @@
+#' Title
+#'
+#' @param fred_key
+#'
+#' @returns A png file
+#' @export
+#'
+#' @examples
 create_states_unemp_heatmap <- function(
     fred_key = fredKey
 ) {
