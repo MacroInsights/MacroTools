@@ -5,47 +5,39 @@
 #' @param geography 'National' (default), 'State', or list of states like c("DC","NM")
 #' @param demography Include national levels of unemployment by gender/race/ethnicity
 #' @param latest Gets the latest complete unemployment figures
-#' @param fred_key A FRED API
-#' @param BLS_key A BLS KEy
+#' @param underutilization If TRUE, downloads U-1 through U-6 measures (U1RATE, U2RATE, UNRATE as U-3, U4RATE, U5RATE, U6RATE)
+#' @param fred_key A FRED API key
+#' @param BLS_key A BLS API key
 #'
 #' @return An xts object with unemployment data
 #' @export
-#'
-#' @examples
-#' unemployment <- get_unemployment()
-#' unemployment_state_demography <- get_unemployment(geography = c("DC","NC"), demography = TRUE)
-#' unemployment_latest <- get_unemployment(latest = TRUE)
-#' unemployment_2020_2021 <- get_unemployment(start_year = 2020, end_year = 2021)
 get_unemployment <- memoise::memoise(function(
     start_year = NULL,
     end_year = NULL,
     geography = "National",
     demography = FALSE,
     latest = FALSE,
+    underutilization = FALSE,
     fred_key = fredKey,
-    BLS_key = blsKey)
-{
+    BLS_key = blsKey
+) {
 
   #######################################################################
   #                          LOGIC FOR DATES
-  # Current year
   currentYear <- as.numeric(format(Sys.Date(), "%Y"))
 
-  # If end_year is NULL, set it to the current year
   if (is.null(end_year)) {
     end_year <- currentYear
   } else {
-    end_year <- as.numeric(end_year) # Ensure end_year is numeric
+    end_year <- as.numeric(end_year)
   }
 
-  # If start_year is NULL, set it to five years less than end_year
   if (is.null(start_year)) {
     start_year <- end_year - 5
   } else {
-    start_year <- as.numeric(start_year) }
+    start_year <- as.numeric(start_year)
+  }
 
-
-  # Ensure start_year is less than end_year
   if (start_year >= end_year) {
     stop("start_year must be less than end_year")
   }
@@ -55,65 +47,109 @@ get_unemployment <- memoise::memoise(function(
   fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
-  states <- data.frame(state = c(state.abb,"DC","PR"))
+  states <- data.frame(state = c(state.abb, "DC", "PR"))
 
+  # ----------------------------
+  # Geography logic
+  # ----------------------------
   if (length(geography) == 1 && geography == "National") {
     variables <- "UNRATE"
   } else if (length(geography) == 1 && geography == "State") {
     variables <- NULL
     for (state in states$state) {
-      tmp <- paste0(state, "UR")
-      variables <- c(variables, tmp)
+      variables <- c(variables, paste0(state, "UR"))
     }
     variables <- c(variables, "UNRATE")
   } else if (is.vector(geography) && length(geography) >= 1) {
-    states <- geography
     variables <- NULL
-    for (state in states) {
-      tmp <- paste0(state, "UR")
-      variables <- c(variables, tmp)
+    for (state in geography) {
+      variables <- c(variables, paste0(state, "UR"))
     }
     variables <- c(variables, "UNRATE")
   } else {
     stop("Invalid input for 'geography'.")
   }
 
-  if (demography) {
-    variables <- c(variables,
-                   "LNS14000003",     # White UR
-                   "LNS14000006",     # Black UR
-                   "LNS14000009",     # Hispanic UR
-                   "LNU04032183"      # Asian UR
-                   )
+  # ----------------------------
+  # Add U-1 ... U-6 measures (FRED series IDs provided)
+  # UNRATE is U-3 and is already included above.
+  # ----------------------------
+  if (isTRUE(underutilization)) {
+    u_measures <- c("U1RATE", "U2RATE", "U4RATE", "U5RATE", "U6RATE")
+    variables <- unique(c(variables, u_measures))
   }
+
+  # ----------------------------
+  # Add demography series from FRED (BLS series added later)
+  # ----------------------------
+  if (demography) {
+    variables <- c(
+      variables,
+      "LNS14000003",  # White UR (SA)
+      "LNS14000006",  # Black UR (SA)
+      "LNS14000009",  # Hispanic UR (SA)
+      "LNU04032183"   # Asian UR (NS)
+    )
+  }
+
   num_series <- length(variables)
 
-
-  # Connect to Fred and Download Data ####
-  # Paparameters of the request
+  # ----------------------------
+  # Download from FRED
+  # ----------------------------
   params <- list(
     series_id = variables,
-    observation_start = rep(as.Date(paste0(start_year,"-01","-01")),
-                            num_series),
-    observation_end = rep(as.Date(paste0(end_year,"-12","-31")), num_series))
+    observation_start = rep(as.Date(paste0(start_year, "-01-01")), num_series),
+    observation_end   = rep(as.Date(paste0(end_year, "-12-31")),  num_series)
+  )
 
-  # Actual request of data
   raw_data_fred <- purrr::pmap_dfr(
     .l = params,
-    .f = ~ fredr::fredr(series_id = ..1,
-                 observation_start = ..2, observation_end = ..3)) %>%
+    .f = ~ fredr::fredr(
+      series_id = ..1,
+      observation_start = ..2,
+      observation_end   = ..3
+    )
+  ) %>%
     dplyr::select(-c(realtime_start, realtime_end)) |>
-    tidyr::pivot_wider(names_from = series_id, values_from = value) |>
-    dplyr::rename(USUR = UNRATE)
+    tidyr::pivot_wider(names_from = series_id, values_from = value)
 
-  if(demography) {
-    # Downloading American Indians and Alaska Natives Unemployment
-    start_year <- params$observation_start[[1]] %>% lubridate::year()
-    end_year <- params$observation_end[[1]] %>% lubridate::year()
+  # ----------------------------
+  # Naming + ordering
+  # ----------------------------
+  if (isTRUE(underutilization)) {
+
+    raw_data_fred <- raw_data_fred %>%
+      dplyr::rename(
+        U1 = U1RATE,
+        U2 = U2RATE,
+        U3 = UNRATE,
+        U4 = U4RATE,
+        U5 = U5RATE,
+        U6 = U6RATE
+      )
+
+    # Put U1..U6 in order (U3 between U2 and U4), keep other columns after
+    u_order <- c("U1", "U2", "U3", "U4", "U5", "U6")
+    raw_data_fred <- raw_data_fred %>%
+      dplyr::relocate(dplyr::any_of(u_order), .before = dplyr::everything())
+
+  } else {
+    # Original behavior
+    raw_data_fred <- raw_data_fred %>% dplyr::rename(USUR = UNRATE)
+  }
+
+  # ----------------------------
+  # BLS block (only if demography == TRUE)
+  # FIXED: build JSON via httr encode="json" (no glue parsing)
+  # ----------------------------
+  if (demography) {
+
+    start_year_bls <- lubridate::year(params$observation_start[[1]])
+    end_year_bls   <- lubridate::year(params$observation_end[[1]])
     api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
 
-    # Specifying the payload
-    demo_variables <- tribble(
+    demo_variables <- tibble::tribble(
       ~seriesID, ~name,
       "LNS14000004", "WhiteMenUR_SA",
       "LNS14000005", "WhiteWomenUR_SA",
@@ -125,64 +161,73 @@ get_unemployment <- memoise::memoise(function(
       "LNU04000008", "BlackWomenUR_NS",
       "LNU04000010", "HispanicMenUR_NS",
       "LNU04000011", "HispanicWomenUR_NS",
-      "LNU04035243", "AIANUR_NS")
+      "LNU04035243", "AIANUR_NS"
+    )
+
     code_vector <- as.character(demo_variables$seriesID)
 
-    payload <- glue::glue('{
-  "seriesid":{{jsonlite::toJSON(code_vector)}},
-  "startyear":"{{start_year}}",
-  "endyear":"{{end_year}}",
-  "registrationkey":"{{blsKey}}"
-}', .open="{{", .close="}}")
-
-    response <- httr::POST(api_url,
-                     body = payload,
-                     httr::content_type("application/json"),
-                     encode = "json")
+    # Build body as an R list; httr will encode JSON safely
+    response <- httr::POST(
+      url = api_url,
+      body = list(
+        seriesid = code_vector,
+        startyear = as.character(start_year_bls),
+        endyear = as.character(end_year_bls),
+        registrationkey = BLS_key
+      ),
+      encode = "json",
+      httr::content_type("application/json")
+    )
 
     raw_data <- httr::content(response, "text", encoding = "UTF-8") %>%
       jsonlite::fromJSON()
 
-    # Combine all the data in long form:
+    # Combine all the data in long form
     df_raw <- raw_data$Results$series |>
-      rowwise() |>
-      mutate(data = list(
+      dplyr::rowwise() |>
+      dplyr::mutate(data = list(
         data |>
-          transmute(date = as.numeric(year),
-                    value = as.numeric(value),
-                    period = periodName) |>
-          mutate(seriesID = first(seriesID)))) |>
-      pull(data) %>%
-      map_dfr(~ .x)
+          dplyr::transmute(
+            date = as.numeric(year),
+            value = as.numeric(value),
+            period = periodName
+          ) |>
+          dplyr::mutate(seriesID = dplyr::first(seriesID))
+      )) |>
+      dplyr::pull(data) %>%
+      purrr::map_dfr(~.x)
 
-    df_tidy <- df_raw %>% as_tibble() %>%
-      mutate(date = ym(paste(df_raw$date,
-                             df_raw$period))) %>%
-      select(date, value, seriesID) %>%
-      left_join(demo_variables) %>%
-      select(-seriesID) %>%
-      pivot_wider(names_from = name, values_from = value)
-
-    raw_data_fred %>% left_join(df_tidy,
-                                by=c("date")) -> raw_data_fred
+    df_tidy <- df_raw %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(date = lubridate::ym(paste(date, period))) %>%
+      dplyr::select(date, value, seriesID) %>%
+      dplyr::left_join(demo_variables, by = c("seriesID")) %>%
+      dplyr::select(-seriesID) %>%
+      tidyr::pivot_wider(names_from = name, values_from = value)
 
     raw_data_fred <- raw_data_fred %>%
-      dplyr::rename(WhiteUR_SA = LNS14000003,
-                    BlackUR_SA = LNS14000006,
-                    HispanicUR_SA = LNS14000009,
-                    AsianUR_NS = LNU04032183
+      dplyr::left_join(df_tidy, by = c("date"))
+
+    # Rename the FRED demographic series already included
+    raw_data_fred <- raw_data_fred %>%
+      dplyr::rename(
+        WhiteUR_SA = LNS14000003,
+        BlackUR_SA = LNS14000006,
+        HispanicUR_SA = LNS14000009,
+        AsianUR_NS = LNU04032183
       )
+  }
 
-
-    }
-
-  # Gets the latest complete unemployment figures
-  if(latest) {
-    raw_data_fred <- raw_data_fred |>
-    tidyr::drop_na() |>
-      tail(1)
+  # ----------------------------
+  # Latest complete row (if requested)
+  # ----------------------------
+  if (latest) {
+    raw_data_fred <- raw_data_fred %>%
+      tidyr::drop_na() %>%
+      utils::tail(1)
   }
 
   raw_data_fred %>% xts::as.xts()
 
-}, cache = memoise::cache_memory())
+}, cache = memoise::cache_memory()
+)
