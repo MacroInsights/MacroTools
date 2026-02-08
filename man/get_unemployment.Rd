@@ -10,6 +10,7 @@ get_unemployment(
   geography = "National",
   demography = FALSE,
   latest = FALSE,
+  underutilization = FALSE,
   fred_key = fredKey,
   BLS_key = blsKey
 )
@@ -25,19 +26,15 @@ get_unemployment(
 
 \item{latest}{Gets the latest complete unemployment figures}
 
-\item{fred_key}{A FRED API}
+\item{underutilization}{If TRUE, downloads U-1 through U-6 measures (U1RATE, U2RATE, UNRATE as U-3, U4RATE, U5RATE, U6RATE)}
 
-\item{BLS_key}{A BLS KEy}
+\item{fred_key}{A FRED API key}
+
+\item{BLS_key}{A BLS API key}
 }
 \value{
 An xts object with unemployment data
 }
 \description{
 Downloads monthly unemployment data from Fred and the BLS
-}
-\examples{
-unemployment <- get_unemployment()
-unemployment_state_demography <- get_unemployment(geography = c("DC","NC"), demography = TRUE)
-unemployment_latest <- get_unemployment(latest = TRUE)
-unemployment_2020_2021 <- get_unemployment(start_year = 2020, end_year = 2021)
 }

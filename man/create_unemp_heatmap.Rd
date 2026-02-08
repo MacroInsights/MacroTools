@@ -14,11 +14,17 @@ create_unemp_heatmap(
 )
 }
 \arguments{
-\item{fred_key}{A FRED API KEy}
+\item{fred_key}{A FRED API Key}
 
-\item{color_up}{A color for when unemployment increases}
+\item{color_up}{A color for when unemployment increases (and when it is unchanged)}
 
 \item{color_down}{A color for when unemployment decreases}
+
+\item{nas}{Color for NA cells}
+
+\item{background}{Table background color}
+
+\item{borders}{Border color}
 }
 \value{
 A PNG Table

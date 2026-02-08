@@ -2,12 +2,12 @@
 
 export("%>%")
 export(create_states_clickable_map)
-export(create_states_unemp_heatmap)
 export(create_unemp_heatmap)
 export(enter_api_credentials)
 export(get_GDP)
 export(get_from_BLS)
 export(get_inflation)
+export(get_jolts)
 export(get_nominal_GDP)
 export(get_price_indeces)
 export(get_price_indeces_nsa)

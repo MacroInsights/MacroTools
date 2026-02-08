@@ -2,7 +2,7 @@
 % Please edit documentation in R/enter_api_credentials.R
 \name{enter_api_credentials}
 \alias{enter_api_credentials}
-\title{A script to load or save API keys for the JECTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
+\title{A script to load or save API keys for the MacroTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
 #############################################################
 NOTE: After saving an API Key, YOU MUST RESTART THE R SESSION
 #############################################################}
@@ -18,7 +18,7 @@ enter_api_credentials(fred_api_key = NULL, bls_api_key = NULL)
 It creates the API keys in the global environment. Maybe not the best practice
 }
 \description{
-A script to load or save API keys for the JECTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
+A script to load or save API keys for the MacroTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
 #############################################################
 NOTE: After saving an API Key, YOU MUST RESTART THE R SESSION
 #############################################################
