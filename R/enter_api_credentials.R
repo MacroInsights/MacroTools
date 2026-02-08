@@ -1,4 +1,4 @@
-#' A script to load or save API keys for the JECTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
+#' A script to load or save API keys for the MacroTools package. If the keys are already saved, it loads them into the environment. If they are not loaded, it produces a message to insert them.
 #' #############################################################
 #' NOTE: After saving an API Key, YOU MUST RESTART THE R SESSION
 #' #############################################################
