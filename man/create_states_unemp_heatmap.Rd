@@ -9,6 +9,9 @@ create_states_unemp_heatmap(fred_key = fredKey)
 \arguments{
 \item{fred_key}{}
 }
+\value{
+A png file
+}
 \description{
 Title
 }
