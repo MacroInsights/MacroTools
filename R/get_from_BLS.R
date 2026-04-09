@@ -73,23 +73,23 @@ get_from_BLS <- memoise::memoise(function(
 
   # Combine all the data in long form:
   df_raw <- raw_data$Results$series |>
-    rowwise() |>
-    mutate(data = list(
+    dplyr::rowwise() |>
+    dplyr::mutate(data = list(
       data |>
-        transmute(date = as.numeric(year),
+        dplyr::transmute(date = as.numeric(year),
                   value = as.numeric(value),
                   period = periodName) |>
-        mutate(seriesID = first(seriesID)))) |>
-    pull(data) %>%
-    map_dfr(~ .x)
+        dplyr::mutate(seriesID = dplyr::first(seriesID)))) |>
+    dplyr::pull(data) %>%
+    purrr::map_dfr(~ .x)
 
   if(format == 'wide') {
     df_output <- df_raw %>%
-      as_tibble() %>%
-      mutate(date = ym(paste(df_raw$date,
+      tibble::as_tibble() %>%
+      dplyr::mutate(date = lubridate::ym(paste(df_raw$date,
                              df_raw$period))) %>%
-      select(date, value, seriesID) %>%
-      pivot_wider(names_from = seriesID, values_from = value)
+      dplyr::select(date, value, seriesID) %>%
+      tidyr::pivot_wider(names_from = seriesID, values_from = value)
     return(df_output)
   }
 
