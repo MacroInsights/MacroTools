@@ -147,8 +147,6 @@ get_unemployment <- memoise::memoise(function(
 
     start_year_bls <- lubridate::year(params$observation_start[[1]])
     end_year_bls   <- lubridate::year(params$observation_end[[1]])
-    api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
-
     demo_variables <- tibble::tribble(
       ~seriesID, ~name,
       "LNS14000004", "WhiteMenUR_SA",
@@ -166,40 +164,16 @@ get_unemployment <- memoise::memoise(function(
 
     code_vector <- as.character(demo_variables$seriesID)
 
-    # Build body as an R list; httr will encode JSON safely
-    response <- httr::POST(
-      url = api_url,
-      body = list(
-        seriesid = code_vector,
-        startyear = as.character(start_year_bls),
-        endyear = as.character(end_year_bls),
-        registrationkey = BLS_key
-      ),
-      encode = "json",
-      httr::content_type("application/json")
+    df_raw <- bls_post_chunked(
+      seriesIDs  = code_vector,
+      start_year = start_year_bls,
+      end_year   = end_year_bls,
+      BLS_key    = BLS_key
     )
-
-    raw_data <- httr::content(response, "text", encoding = "UTF-8") %>%
-      jsonlite::fromJSON()
-
-    # Combine all the data in long form
-    df_raw <- raw_data$Results$series |>
-      dplyr::rowwise() |>
-      dplyr::mutate(data = list(
-        data |>
-          dplyr::transmute(
-            date = as.numeric(year),
-            value = as.numeric(value),
-            period = periodName
-          ) |>
-          dplyr::mutate(seriesID = dplyr::first(seriesID))
-      )) |>
-      dplyr::pull(data) %>%
-      purrr::map_dfr(~.x)
 
     df_tidy <- df_raw %>%
       tibble::as_tibble() %>%
-      dplyr::mutate(date = lubridate::ym(paste(date, period))) %>%
+      dplyr::mutate(date = lubridate::ym(paste(year, period))) %>%
       dplyr::select(date, value, seriesID) %>%
       dplyr::left_join(demo_variables, by = c("seriesID")) %>%
       dplyr::select(-seriesID) %>%

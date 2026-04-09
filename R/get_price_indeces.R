@@ -115,30 +115,17 @@ get_price_indeces <- memoise::memoise(function(
   # Substituting Fuel Oil
   start_year <- params$observation_start[[1]] %>% lubridate::year()
   end_year <- params$observation_end[[1]] %>% lubridate::year()
-  api_url <- "https://api.bls.gov/publicAPI/v2/timeseries/data/"
-  payload <- glue::glue('{
-                    "seriesid":["CUUR0000SEHE01"],
-                    "startyear":"{{start_year}}",
-                    "endyear":"{{end_year}}",
-                    "registrationkey":"{{BLS_key}}"
-                    }', .open="{{", .close="}}")
 
-  response <- httr::POST(api_url,
-                         body = payload,
-                         httr::content_type("application/json"),
-                         encode = "json")
-
-  x <- httr::content(response, "text") %>%
-    jsonlite::fromJSON()
-
-  Fuel_Oil_raw <- x$Results$series$data[[1]] %>%
-    dplyr::as_tibble()
-
-  # Tidying up the data
-  Fuel_Oil <- Fuel_Oil_raw %>%
-    dplyr::transmute(date = lubridate::ym(paste(Fuel_Oil_raw$year,
-                              Fuel_Oil_raw$periodName)),
-              `Fuel Oil` = value %>% as.numeric())
+  Fuel_Oil <- bls_post_chunked(
+    seriesIDs  = "CUUR0000SEHE01",
+    start_year = start_year,
+    end_year   = end_year,
+    BLS_key    = BLS_key
+  ) |>
+    dplyr::transmute(
+      date       = lubridate::ym(paste(year, period)),
+      `Fuel Oil` = value
+    )
 
   #Joins BLS
 

@@ -19,7 +19,7 @@ get_from_BLS(
 
 \item{seriesIDs}{Vector of codes from the BLS to get.}
 
-\item{format}{Output format to get: Default is 'long', but it can return 'wide' and 'individual' for individual series}
+\item{format}{Output format to get: Default is 'long', but it can return 'wide'}
 
 \item{BLS_key}{A BLS Key}
 }
@@ -33,6 +33,5 @@ Downloads specific series from BLS as either long format, wide format, or indivi
 get_from_BLS(seriesIDs = "LNS14000000")
 get_from_BLS(seriesIDs = c("LNS14000000","CES0000000001"))
 get_from_BLS(end_year = 2019, start_year = 2012, seriesIDs = "LNS14000000")
-get_from_BLS(seriesIDs = c("LNS14000000","CES0000000001"), format = 'individual')
 get_from_BLS(seriesIDs = c("LNS14000000","BDU0000000000000000110001LQ5"), format = 'wide')
 }
