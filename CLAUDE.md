@@ -15,7 +15,6 @@ MacroTools/
 ├── MacroTools.Rproj     # RStudio project file
 ├── R/                   # All R source files
 │   ├── MacroTools-package.R         # Package-level documentation
-│   ├── JECTools-package.R           # Legacy package stub
 │   ├── enter_api_credentials.R      # Saves/loads FRED and BLS API keys
 │   ├── get_GDP.R                    # Downloads real GDP (national or state-level) from FRED
 │   ├── get_nominal_GDP.R            # Downloads nominal GDP from FRED
