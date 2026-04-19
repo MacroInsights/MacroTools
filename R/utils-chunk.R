@@ -1,3 +1,15 @@
+xts_to_tibble_base <- function(data) {
+  tidyr::tibble(date = zoo::index(data), as.data.frame(zoo::coredata(data)))
+}
+
+validate_year_range <- function(start_year, end_year) {
+  current_year <- as.numeric(format(Sys.Date(), "%Y"))
+  if (is.null(end_year)) end_year <- current_year else end_year <- as.numeric(end_year)
+  if (is.null(start_year)) start_year <- end_year - 5 else start_year <- as.numeric(start_year)
+  if (start_year >= end_year) stop("start_year must be less than end_year")
+  list(start_year = start_year, end_year = end_year)
+}
+
 # Internal helper — not exported.
 # Calls the BLS API, chunking the year range into 20-year windows as required
 # by the API limit. Returns a long-format tibble with columns:
@@ -38,7 +50,7 @@ bls_post_chunked <- function(seriesIDs, start_year, end_year, BLS_key) {
         data |>
           dplyr::transmute(
             year     = as.numeric(year),
-            value    = as.numeric(value),
+            value    = suppressWarnings(as.numeric(value)),
             period   = periodName
           ) |>
           dplyr::mutate(seriesID = dplyr::first(seriesID))

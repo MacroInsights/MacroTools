@@ -8,9 +8,5 @@
 #' @examples
 #' data_tibble <- get_unemployment() |> transform_to_tibble()
 transform_to_tibble <- function(data = xts_obj) {
-  # Convert xts to tibble
-  tibble_obj <- tidyr::tibble(date = zoo::index(data),
-                              as.data.frame(zoo::coredata(data)))
-
-  return(tibble_obj)
+  return(xts_to_tibble_base(data))
 }

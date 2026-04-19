@@ -21,29 +21,11 @@ get_claims <- memoise::memoise(function(
     fred_key = fredKey
 ) {
 
-  #######################################################################
-  #                          LOGIC FOR DATES
-  currentYear <- as.numeric(format(Sys.Date(), "%Y"))
-
-  if (is.null(end_year)) {
-    end_year <- currentYear
-  } else {
-    end_year <- as.numeric(end_year)
-  }
-
-  if (is.null(start_year)) {
-    start_year <- end_year - 5
-  } else {
-    start_year <- as.numeric(start_year)
-  }
-
-  if (start_year >= end_year) {
-    stop("start_year must be less than end_year")
-  }
-  #######################################################################
+  years <- validate_year_range(start_year, end_year)
+  start_year <- years$start_year
+  end_year <- years$end_year
 
   # Setting FRED API Key
-  fred_key <- gsub("\"", "", fred_key)
   fredr::fredr_set_key(fred_key)
 
   # Claims series (weekly, SA)

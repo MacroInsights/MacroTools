@@ -2,74 +2,40 @@
 % Please edit documentation in R/get_price_indeces.R
 \name{get_price_indeces}
 \alias{get_price_indeces}
-\title{Downloads the following seasonally adjusted price indexes data from Fred and the BLS:
-"CPIAUCSL",	      'CPI',
-"CPILFESL",	      'Core CPI',
-"PCEPI",	          'PCE',
-"PCEPILFE",	      'Core PCE',
-"PPIFIS",	        'Producer Price Index',
-"CPIUFDSL",	      'Food',
-"CUSR0000SAF11",	  'Food at home',
-"CUSR0000SEFV",	  'Food away',
-"CPIENGSL",	      'Energy',
-"CUSR0000SACE",	  'Energy commodities',
-"CUSR0000SETB01",	'Gasoline',
-"CUSR0000SEHF",	  'Energy services',
-"CUSR0000SEHF01",	'Electricity',
-"CUSR0000SEHF02",	'Utility gas service',
-"CUSR0000SACL1E",	'Commodities less food and energy',
-"CUSR0000SETA01",	'New vehicles',
-"CUSR0000SETA02",	'Used cars and trucks',
-"CPIAPPSL",	      'Apparel',
-"CUSR0000SAM1",	  'Medical care commodities',
-"CUSR0000SASLE",	  'Services less energy',
-"CUSR0000SAH1",	  'Shelter',
-"CUSR0000SAS4",	  'Transportation',
-"CUSR0000SAM2",	  'Medical care services')}
+\title{Downloads price index data from FRED and the BLS.}
 \usage{
 get_price_indeces(
   start_year = NULL,
   end_year = NULL,
+  seasonally_adjusted = TRUE,
   fred_key = fredKey,
   BLS_key = blsKey
 )
 }
 \arguments{
-\item{fred_key}{A fred API key}
+\item{start_year}{First year of data to get. Default is five years from 'end_year'}
 
-\item{BLS_key}{A bls API Key}
+\item{end_year}{Last year of data to get. Default is today's year}
 
-\item{years}{Number of years of data to get}
+\item{seasonally_adjusted}{If TRUE (default), returns seasonally adjusted series. If FALSE, returns not seasonally adjusted series.}
+
+\item{fred_key}{A FRED API key}
+
+\item{BLS_key}{A BLS API key}
 }
 \value{
-An xts object with unemployment data
+An xts object with price index data
 }
 \description{
-Downloads the following seasonally adjusted price indexes data from Fred and the BLS:
-"CPIAUCSL",	      'CPI',
-"CPILFESL",	      'Core CPI',
-"PCEPI",	          'PCE',
-"PCEPILFE",	      'Core PCE',
-"PPIFIS",	        'Producer Price Index',
-"CPIUFDSL",	      'Food',
-"CUSR0000SAF11",	  'Food at home',
-"CUSR0000SEFV",	  'Food away',
-"CPIENGSL",	      'Energy',
-"CUSR0000SACE",	  'Energy commodities',
-"CUSR0000SETB01",	'Gasoline',
-"CUSR0000SEHF",	  'Energy services',
-"CUSR0000SEHF01",	'Electricity',
-"CUSR0000SEHF02",	'Utility gas service',
-"CUSR0000SACL1E",	'Commodities less food and energy',
-"CUSR0000SETA01",	'New vehicles',
-"CUSR0000SETA02",	'Used cars and trucks',
-"CPIAPPSL",	      'Apparel',
-"CUSR0000SAM1",	  'Medical care commodities',
-"CUSR0000SASLE",	  'Services less energy',
-"CUSR0000SAH1",	  'Shelter',
-"CUSR0000SAS4",	  'Transportation',
-"CUSR0000SAM2",	  'Medical care services')
+Variables included:
+CPI, Core CPI, PCE, Core PCE, Producer Price Index,
+Food, Food at home, Food away, Energy, Energy commodities,
+Gasoline, Energy services, Electricity, Utility gas service,
+Commodities less food and energy, New vehicles, Used cars and trucks,
+Apparel, Medical care commodities, Services less energy,
+Shelter, Transportation, Medical care services, Fuel Oil
 }
 \examples{
 price_indeces <- get_price_indeces()
+price_indeces_nsa <- get_price_indeces(seasonally_adjusted = FALSE)
 }

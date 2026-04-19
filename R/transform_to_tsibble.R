@@ -8,12 +8,7 @@
 #' @examples
 #' data_tsibble <- get_unemployment() |> transform_to_tsibble()
 transform_to_tsibble <- function(data = xts_obj) {
-  # Convert xts to tibble
-  tibble_obj <- tidyr::tibble(date = zoo::index(data),
-                              as.data.frame(zoo::coredata(data)))
-
-  # Convert tibble to tsibble
-  tsibble_obj <- tsibble::as_tsibble(tibble_obj, index = date)
+  tsibble_obj <- tsibble::as_tsibble(xts_to_tibble_base(data), index = date)
 
   return(tsibble_obj)
 }

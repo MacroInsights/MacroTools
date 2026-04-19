@@ -2,13 +2,14 @@
 % Please edit documentation in R/get_GDP.R
 \name{get_GDP}
 \alias{get_GDP}
-\title{Downloads Real GDP from Fred for the US, all US States, or a selection of states.}
+\title{Downloads GDP from Fred for the US, all US States, or a selection of states.}
 \usage{
 get_GDP(
   start_year = NULL,
   end_year = NULL,
   geography = "National",
   latest = FALSE,
+  real = TRUE,
   fred_key = fredKey
 )
 }
@@ -21,6 +22,8 @@ get_GDP(
 
 \item{latest}{Gets the latest complete GDP figures}
 
+\item{real}{If TRUE (default), returns real (inflation-adjusted) GDP. If FALSE, returns nominal GDP.}
+
 \item{fred_key}{A FRED API}
 }
 \value{
@@ -31,6 +34,7 @@ All figures are in millions
 }
 \examples{
 real_GDP <- get_GDP()
+nominal_GDP <- get_GDP(real = FALSE)
 real_GDP_from_2020 <- get_GDP(start_year = 2020)
 states_real_GDP <- get_GDP(geography = c("DC","NC"), latest = TRUE)
 }

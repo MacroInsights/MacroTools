@@ -66,6 +66,30 @@ Keys are stored in `~/.Renviron` and loaded into the global environment as `fred
 
 ---
 
+## To-Do
+
+### Bugs
+- [x] **`enter_api_credentials.R`** — `Sys.setenv(api_key_name = new_value)` sets a literal env var named `"api_key_name"`. Fixed in this session.
+- [x] **`get_price_indeces.R:135`, `get_price_indeces_nsa.R:138`** — `colnames(...)[1:num_series+1]` has wrong operator precedence, renames wrong columns. Fixed in this session.
+
+### Performance
+- [x] **`get_GDP.R`, `get_unemployment.R`** — `c(variables, tmp)` in loops is O(n²). Replace with vectorized `paste0(states$state, "RQGSP")`.
+- [x] **`get_price_indeces.R:116-117`, `get_price_indeces_nsa.R:119-120`** — `start_year`/`end_year` re-extracted from `params` unnecessarily; variables already exist.
+
+### Major Refactors
+- [x] **Date logic** — identical 7-line block copy-pasted across 9 files (`get_GDP.R`, `get_nominal_GDP.R`, `get_from_BLS.R`, `get_inflation.R`, `get_price_indeces.R`, `get_price_indeces_nsa.R`, `get_unemployment.R`, `get_jolts.R`, `get_claims.R`). Extract to `validate_year_range()` in `utils-chunk.R`.
+- [x] **`get_GDP.R` + `get_nominal_GDP.R`** — 95% identical. Differ only in series IDs. Merge into one function with a `real = TRUE` parameter.
+- [x] **`get_price_indeces.R` + `get_price_indeces_nsa.R`** — nearly identical. Differ only in series IDs. Merge into one function with a `seasonally_adjusted = TRUE` parameter.
+- [x] **`gsug("\"", "", fred_key)`** — repeated in every data-fetching function. Strip quotes once in `enter_api_credentials.R` instead.
+
+### Minor / Cleanup
+- [x] **`get_GDP.R`, `get_nominal_GDP.R`** — large commented-out per capita blocks (~50 lines each). Delete if not planned.
+- [x] **Typo** — "Paparameters" in `get_price_indeces.R:100`, `get_price_indeces_nsa.R:103`, `get_GDP.R:82`, `get_nominal_GDP.R:82`, `get_from_BLS.R:82`.
+- [x] **Unnecessary WHAT comments** — scattered across multiple files. Remove comments that just describe what the next line does.
+- [x] **`transform_to_tibble.R` + `transform_to_tsibble.R`** — share identical first 2 lines of conversion logic. Extract to a private helper.
+
+---
+
 ## Rules for Claude
 
 1. **Always explain planned changes before making them.** Before editing any file, describe what change will be made and why.

@@ -50,13 +50,13 @@ enter_api_credentials <- function(fred_api_key = NULL, bls_api_key = NULL) {
     existing_value <- Sys.getenv(api_key_name)
 
     if (!is.null(new_value)) {
-      # Correctly use Sys.setenv to dynamically set an environment variable
-      Sys.setenv(api_key_name = new_value)
+      new_value <- gsub('"', '', new_value)
+      do.call(Sys.setenv, setNames(list(new_value), api_key_name))
       message(paste(api_key_name, "will be updated."))
       renviron_contents <- update_renviron_contents(renviron_contents, api_key_name, new_value)
     } else if (existing_value == "") {
-      new_value <- readline(prompt = paste("Enter your", api_key_name, ": "))
-      Sys.setenv(api_key_name = new_value)
+      new_value <- gsub('"', '', readline(prompt = paste("Enter your", api_key_name, ": ")))
+      do.call(Sys.setenv, setNames(list(new_value), api_key_name))
       renviron_contents <- update_renviron_contents(renviron_contents, api_key_name, new_value)
       message(paste(api_key_name, "saved to .Renviron. Please restart your R session."))
     } else {
