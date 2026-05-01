@@ -14,20 +14,66 @@
 #' @param quarters Integer vector of quarters to retrieve. Default is `1:4` (all quarters).
 #'   Pass `"a"` for annual aggregates.
 #' @param industry_code NAICS industry code to filter on. Default is `"10"` (all industries total).
-#'   Common codes: `"1011"` (all private), `"23"` (construction), `"31-33"` (manufacturing),
-#'   `"42"` (wholesale trade), `"44-45"` (retail trade), `"62"` (health care),
-#'   `"72"` (leisure & hospitality).
-#' @param ownership Ownership code to filter on. Default is `0` (all ownership types).
-#'   Options: `1` = federal government, `2` = state government, `3` = local government,
-#'   `5` = private.
+#'   The 20 top-level NAICS sectors are:
+#'   \itemize{
+#'     \item `"10"`    — All industries (QCEW aggregate, not a NAICS code)
+#'     \item `"1011"`  — Natural resources & mining (QCEW supersector)
+#'     \item `"1012"`  — Construction (QCEW supersector)
+#'     \item `"1013"`  — Manufacturing (QCEW supersector)
+#'     \item `"11"`    — Agriculture, forestry, fishing & hunting
+#'     \item `"21"`    — Mining, quarrying, oil & gas extraction
+#'     \item `"22"`    — Utilities
+#'     \item `"23"`    — Construction
+#'     \item `"31-33"` — Manufacturing
+#'     \item `"42"`    — Wholesale trade
+#'     \item `"44-45"` — Retail trade
+#'     \item `"48-49"` — Transportation & warehousing
+#'     \item `"51"`    — Information
+#'     \item `"52"`    — Finance & insurance
+#'     \item `"53"`    — Real estate & rental and leasing
+#'     \item `"54"`    — Professional, scientific & technical services
+#'     \item `"55"`    — Management of companies & enterprises
+#'     \item `"56"`    — Administrative & support / waste management
+#'     \item `"61"`    — Educational services
+#'     \item `"62"`    — Health care & social assistance
+#'     \item `"71"`    — Arts, entertainment & recreation
+#'     \item `"72"`    — Accommodation & food services
+#'     \item `"81"`    — Other services (except public administration)
+#'     \item `"92"`    — Public administration
+#'   }
+#'   Finer NAICS codes (3-, 4-, 5-, and 6-digit) are also supported wherever BLS publishes them.
+#' @param ownership Ownership code to filter on. Default is `0` (all ownership types combined).
+#'   **Note:** BLS only publishes an `own_code = 0` aggregate row for `industry_code = "10"`
+#'   (all industries). For any specific sector (e.g. `"31-33"` for manufacturing) use `5`.
+#'   Options:
+#'   \itemize{
+#'     \item `0` — Total covered (all ownership combined); only valid with `industry_code = "10"`)
+#'     \item `1` — Federal government
+#'     \item `2` — State government
+#'     \item `3` — Local government
+#'     \item `5` — Private
+#'   }
 #' @param aggregate_to_msa Logical. If `TRUE` and `cbsa` is provided, county-level rows are
 #'   summed to MSA level (employment and establishments summed; `avg_wkly_wage` is
 #'   employment-weighted). Default is `FALSE`.
 #'
-#' @return A tibble with columns: `area_fips`, `year`, `qtr`, `own_code`, `industry_code`,
-#'   `qtrly_estabs`, `month1_emplvl`, `month2_emplvl`, `month3_emplvl`, `avg_monthly_emplvl`,
-#'   `total_qtrly_wages`, `avg_wkly_wage`. When `aggregate_to_msa = TRUE`, `area_fips`
-#'   contains the CBSA code and an `area_title` column with the MSA name is added.
+#' @return A tibble with one row per area × year × quarter combination, containing:
+#'   \itemize{
+#'     \item `area_fips`          — 5-digit county FIPS code (or CBSA code when `aggregate_to_msa = TRUE`)
+#'     \item `year`               — Calendar year
+#'     \item `qtr`                — Quarter (1–4, or `"a"` for annual)
+#'     \item `own_code`           — Ownership code (see `ownership` parameter)
+#'     \item `industry_code`      — NAICS industry code (see `industry_code` parameter)
+#'     \item `qtrly_estabs`       — Number of establishments reporting in the quarter
+#'     \item `month1_emplvl`      — Employment level in the first month of the quarter
+#'     \item `month2_emplvl`      — Employment level in the second month of the quarter
+#'     \item `month3_emplvl`      — Employment level in the third month of the quarter
+#'     \item `avg_monthly_emplvl` — Average of the three monthly employment levels
+#'     \item `total_qtrly_wages`  — Total wages paid in the quarter (dollars)
+#'     \item `avg_wkly_wage`      — Average weekly wage (total quarterly wages / 13 weeks)
+#'   }
+#'   When `aggregate_to_msa = TRUE`, `area_fips` contains the CBSA code and an `area_title`
+#'   column with the MSA name is added.
 #' @export
 #'
 #' @examples
@@ -36,10 +82,11 @@
 #'
 #' # Manufacturing sector, Greensboro-HP MSA aggregated
 #' get_from_qcew(
-#'   cbsa          = "24660",
-#'   start_year    = 2015,
-#'   end_year      = 2023,
-#'   industry_code = "31-33",
+#'   cbsa             = "24660",
+#'   start_year       = 2015,
+#'   end_year         = 2023,
+#'   industry_code    = "31-33",
+#'   ownership        = 5,
 #'   aggregate_to_msa = TRUE
 #' )
 #'

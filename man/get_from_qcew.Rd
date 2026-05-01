@@ -32,23 +32,69 @@ constituent counties internally.}
 Pass \code{"a"} for annual aggregates.}
 
 \item{industry_code}{NAICS industry code to filter on. Default is \code{"10"} (all industries total).
-Common codes: \code{"1011"} (all private), \code{"23"} (construction), \code{"31-33"} (manufacturing),
-\code{"42"} (wholesale trade), \code{"44-45"} (retail trade), \code{"62"} (health care),
-\code{"72"} (leisure & hospitality).}
+The 20 top-level NAICS sectors are:
+\itemize{
+\item \code{"10"}    — All industries (QCEW aggregate, not a NAICS code)
+\item \code{"1011"}  — Natural resources & mining (QCEW supersector)
+\item \code{"1012"}  — Construction (QCEW supersector)
+\item \code{"1013"}  — Manufacturing (QCEW supersector)
+\item \code{"11"}    — Agriculture, forestry, fishing & hunting
+\item \code{"21"}    — Mining, quarrying, oil & gas extraction
+\item \code{"22"}    — Utilities
+\item \code{"23"}    — Construction
+\item \code{"31-33"} — Manufacturing
+\item \code{"42"}    — Wholesale trade
+\item \code{"44-45"} — Retail trade
+\item \code{"48-49"} — Transportation & warehousing
+\item \code{"51"}    — Information
+\item \code{"52"}    — Finance & insurance
+\item \code{"53"}    — Real estate & rental and leasing
+\item \code{"54"}    — Professional, scientific & technical services
+\item \code{"55"}    — Management of companies & enterprises
+\item \code{"56"}    — Administrative & support / waste management
+\item \code{"61"}    — Educational services
+\item \code{"62"}    — Health care & social assistance
+\item \code{"71"}    — Arts, entertainment & recreation
+\item \code{"72"}    — Accommodation & food services
+\item \code{"81"}    — Other services (except public administration)
+\item \code{"92"}    — Public administration
+}
+Finer NAICS codes (3-, 4-, 5-, and 6-digit) are also supported wherever BLS publishes them.}
 
-\item{ownership}{Ownership code to filter on. Default is \code{0} (all ownership types).
-Options: \code{1} = federal government, \code{2} = state government, \code{3} = local government,
-\code{5} = private.}
+\item{ownership}{Ownership code to filter on. Default is \code{0} (all ownership types combined).
+\strong{Note:} BLS only publishes an \code{own_code = 0} aggregate row for \code{industry_code = "10"}
+(all industries). For any specific sector (e.g. \code{"31-33"} for manufacturing) use \code{5}.
+Options:
+\itemize{
+\item \code{0} — Total covered (all ownership combined); only valid with \code{industry_code = "10"})
+\item \code{1} — Federal government
+\item \code{2} — State government
+\item \code{3} — Local government
+\item \code{5} — Private
+}}
 
 \item{aggregate_to_msa}{Logical. If \code{TRUE} and \code{cbsa} is provided, county-level rows are
 summed to MSA level (employment and establishments summed; \code{avg_wkly_wage} is
 employment-weighted). Default is \code{FALSE}.}
 }
 \value{
-A tibble with columns: \code{area_fips}, \code{year}, \code{qtr}, \code{own_code}, \code{industry_code},
-\code{qtrly_estabs}, \code{month1_emplvl}, \code{month2_emplvl}, \code{month3_emplvl}, \code{avg_monthly_emplvl},
-\code{total_qtrly_wages}, \code{avg_wkly_wage}. When \code{aggregate_to_msa = TRUE}, \code{area_fips}
-contains the CBSA code and an \code{area_title} column with the MSA name is added.
+A tibble with one row per area × year × quarter combination, containing:
+\itemize{
+\item \code{area_fips}          — 5-digit county FIPS code (or CBSA code when \code{aggregate_to_msa = TRUE})
+\item \code{year}               — Calendar year
+\item \code{qtr}                — Quarter (1–4, or \code{"a"} for annual)
+\item \code{own_code}           — Ownership code (see \code{ownership} parameter)
+\item \code{industry_code}      — NAICS industry code (see \code{industry_code} parameter)
+\item \code{qtrly_estabs}       — Number of establishments reporting in the quarter
+\item \code{month1_emplvl}      — Employment level in the first month of the quarter
+\item \code{month2_emplvl}      — Employment level in the second month of the quarter
+\item \code{month3_emplvl}      — Employment level in the third month of the quarter
+\item \code{avg_monthly_emplvl} — Average of the three monthly employment levels
+\item \code{total_qtrly_wages}  — Total wages paid in the quarter (dollars)
+\item \code{avg_wkly_wage}      — Average weekly wage (total quarterly wages / 13 weeks)
+}
+When \code{aggregate_to_msa = TRUE}, \code{area_fips} contains the CBSA code and an \code{area_title}
+column with the MSA name is added.
 }
 \description{
 Uses the BLS QCEW public flat-file API — no API key required. Queries are made at the
@@ -60,10 +106,11 @@ get_from_qcew(area_fips = "37081", start_year = 2020, end_year = 2023)
 
 # Manufacturing sector, Greensboro-HP MSA aggregated
 get_from_qcew(
-  cbsa          = "24660",
-  start_year    = 2015,
-  end_year      = 2023,
-  industry_code = "31-33",
+  cbsa             = "24660",
+  start_year       = 2015,
+  end_year         = 2023,
+  industry_code    = "31-33",
+  ownership        = 5,
   aggregate_to_msa = TRUE
 )
 
