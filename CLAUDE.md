@@ -16,24 +16,18 @@ MacroTools/
 ├── R/                   # All R source files
 │   ├── MacroTools-package.R         # Package-level documentation
 │   ├── enter_api_credentials.R      # Saves/loads FRED and BLS API keys
-│   ├── get_GDP.R                    # Downloads real GDP (national or state-level) from FRED
-│   ├── get_nominal_GDP.R            # Downloads nominal GDP from FRED
+│   ├── get_GDP.R                    # Downloads real or nominal GDP from FRED (real = TRUE param)
 │   ├── get_from_BLS.R               # Generic BLS data downloader
+│   ├── get_from_fred.R              # Generic FRED data downloader (long format, separate param)
 │   ├── get_inflation.R              # Downloads inflation data
-│   ├── get_price_indeces.R          # Downloads price indices (seasonally adjusted)
-│   ├── get_price_indeces_nsa.R      # Downloads price indices (not seasonally adjusted)
+│   ├── get_price_indeces.R          # Downloads price indices (seasonally_adjusted = TRUE param)
 │   ├── get_unemployment.R           # Downloads unemployment data
 │   ├── get_jolts.R                  # Downloads JOLTS (job openings/labor turnover) data
 │   ├── get_claims.R                 # Downloads unemployment insurance claims
-│   ├── create_unemp_heatmap.R       # Creates unemployment heatmap visualizations
-│   ├── create_states_unemp_heatmap.R # Creates state-level unemployment heatmaps
-│   ├── create_states_clickable_map.R # Creates interactive clickable state maps (leaflet)
-│   ├── transform_to_tibble.R        # Converts data to tibble format
-│   ├── transform_to_tsibble.R       # Converts data to tsibble (time series tibble) format
-│   └── utils-pipe.R                 # Re-exports the magrittr pipe (%>%)
-├── data/
-│   ├── states_urls.csv              # State-level URL mapping data
-│   └── states_urls.rda              # Same data in R binary format
+│   ├── transform_to_tibble.R        # Converts xts object to tibble format
+│   ├── transform_to_tsibble.R       # Converts xts object to tsibble format
+│   ├── utils-pipe.R                 # Re-exports the magrittr pipe (%>%)
+│   └── utils-chunk.R                # Internal helpers: validate_year_range(), bls_post_chunked(), xts_to_tibble_base()
 └── man/                             # Auto-generated roxygen2 documentation (.Rd files)
 ```
 
@@ -41,12 +35,10 @@ MacroTools/
 
 - **fredr** — FRED API client
 - **xts / tsibble / zoo** — time series data structures
-- **dplyr / tidyr / purrr / magrittr** — data manipulation
-- **leaflet / tmap** — interactive and static maps
+- **dplyr / tidyr / purrr / magrittr / tibble** — data manipulation
 - **memoise** — function result caching
 - **httr / jsonlite / glue** — BLS API requests
 - **lubridate** — date handling
-- **gt / webshot2** — table rendering
 
 ## API Key Setup
 
@@ -60,7 +52,7 @@ Keys are stored in `~/.Renviron` and loaded into the global environment as `fred
 
 ## Development Notes
 
-- Documentation is generated with **roxygen2** (`RoxygenNote: 7.3.2`). Do not edit `NAMESPACE` or `man/*.Rd` files by hand.
+- Documentation is generated with **roxygen2** (`RoxygenNote: 7.3.3`). Do not edit `NAMESPACE` or `man/*.Rd` files by hand.
 - Data-fetching functions use `memoise::memoise()` for in-memory caching to avoid redundant API calls.
 - The package uses both the base pipe (`|>`) and the magrittr pipe (`%>%`) interchangeably.
 
@@ -87,6 +79,32 @@ Keys are stored in `~/.Renviron` and loaded into the global environment as `fred
 - [x] **Typo** — "Paparameters" in `get_price_indeces.R:100`, `get_price_indeces_nsa.R:103`, `get_GDP.R:82`, `get_nominal_GDP.R:82`, `get_from_BLS.R:82`.
 - [x] **Unnecessary WHAT comments** — scattered across multiple files. Remove comments that just describe what the next line does.
 - [x] **`transform_to_tibble.R` + `transform_to_tsibble.R`** — share identical first 2 lines of conversion logic. Extract to a private helper.
+
+---
+
+## CRAN Readiness Assessment
+
+The package is **not currently CRAN-ready**. API keys alone are not a disqualifier (many API packages are on CRAN), but the issues below are. This section tracks what needs to be resolved before a submission attempt.
+
+### Hard Blockers (R CMD check failures)
+
+- [ ] **`LazyData: true` in DESCRIPTION with no `data/` folder** — the data folder was deleted; this line must be removed.
+- [ ] **`tibble` missing from `Imports`** — `tibble::as_tibble()`, `tibble::tribble()`, `tibble::tibble()` are used across multiple files but `tibble` is not declared.
+- [ ] **`<<-` global assignment in `enter_api_credentials.R`** — CRAN prohibits modifying the global environment (`fredKey <<- ...`, `blsKey <<- ...`).
+- [ ] **Writing to `~/.Renviron`** — packages may not modify files outside the session temp directory without an `interactive()` guard.
+- [ ] **`readline()` without `interactive()` guard** — hangs in non-interactive contexts (R CMD check runs non-interactively).
+- [ ] **All `@examples` call live APIs** — every example needs `\dontrun{}` or `\donttest{}`.
+
+### Bugs (not CRAN-specific)
+
+- [ ] **`transform_to_tibble(data = xts_obj)` and `transform_to_tsibble(data = xts_obj)`** — `xts_obj` is not defined anywhere; calling either function without an argument will error. Should be `function(data)` with no default.
+
+### NOTEs / Warnings
+
+- [ ] **Typo in DESCRIPTION Title** — "Macroecononomic" (triple 'o').
+- [ ] **Author name reversed in DESCRIPTION** — `person("Romero", "Alfredo", ...)` displays as "Romero Alfredo". Should be `person("Alfredo", "Romero", ...)`.
+- [ ] **`digest` in `Imports` but never called directly** — it is a transitive dependency of `memoise`; listing it explicitly generates a NOTE.
+- [ ] **No tests** — not a hard blocker but CRAN reviewers notice.
 
 ---
 
