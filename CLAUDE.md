@@ -21,6 +21,7 @@ MacroTools/
 │   ├── get_from_fred.R              # Generic FRED data downloader (long format, separate param)
 │   ├── get_inflation.R              # Downloads inflation data
 │   ├── get_price_indeces.R          # Downloads price indices (seasonally_adjusted = TRUE param)
+│   ├── get_employment.R             # Downloads employment by sector, national (FRED) and state (BLS)
 │   ├── get_unemployment.R           # Downloads unemployment data
 │   ├── get_jolts.R                  # Downloads JOLTS (job openings/labor turnover) data
 │   ├── get_claims.R                 # Downloads unemployment insurance claims
