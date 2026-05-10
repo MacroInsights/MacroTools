@@ -45,18 +45,13 @@ bls_post_chunked <- function(seriesIDs, start_year, end_year, BLS_key) {
     }
 
     raw_data$Results$series |>
-      dplyr::rowwise() |>
-      dplyr::mutate(data = list(
-        data |>
-          dplyr::transmute(
-            year     = as.numeric(year),
-            value    = suppressWarnings(as.numeric(value)),
-            period   = periodName
-          ) |>
-          dplyr::mutate(seriesID = dplyr::first(seriesID))
-      )) |>
-      dplyr::pull(data) |>
-      purrr::map_dfr(~.x)
+      tidyr::unnest(data) |>
+      dplyr::transmute(
+        seriesID = seriesID,
+        year     = as.numeric(year),
+        value    = suppressWarnings(as.numeric(value)),
+        period   = periodName
+      )
   }) |>
     dplyr::distinct()
 }
